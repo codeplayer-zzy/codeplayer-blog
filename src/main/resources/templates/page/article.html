@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>CodePlayer-Blog</title>
+    <meta name="description" content="CodePlayerBlog">
+    <!-- 360浏览器急速模式 -->
+    <meta name="renderer" content="webkit">
+
+    <link rel="stylesheet" href="/common/css/bootstrap.css" th:href="@{/common/css/bootstrap.css}">
+    <link rel="stylesheet" href="/front/style.css" th:href="@{/front/style.css}">
+    <!-- 全局js -->
+    <script src="/common/js/jquery-3.6.0.min.js" th:src="@{/common/js/jquery-3.6.0.min.js}"></script>
+    <script src="/common/js/moment.js" th:src="@{/common/js/moment.js}"></script>
+    <script src="/common/js/bootstrap.js" th:src="@{/common/js/bootstrap.js}"></script>
+    <script src="/front/codeplayer.js" th:src="@{/front/codeplayer.js}"></script>
+    <!--editormd js-->
+    <script src="/common/js/editormd.js" th:src="@{/common/js/editormd.js}"></script>
+    <script src="/common/js/lib/marked.min.js" th:src="@{/common/js/lib/marked.min.js}"></script>
+    <script src="/common/js/lib/prettify.min.js" th:src="@{/common/js/lib/prettify.min.js}"></script>
+    <link href="/common/css/editormd.preview.css" rel="stylesheet" th:href="@{/common/css/editormd.preview.css}">
+    <script th:src="@{/common/js/lib/raphael.min.js}"></script>
+    <script th:src="@{/common/js/lib/underscore.min.js}"></script>
+    <script th:src="@{/common/js/lib/sequence-diagram.min.js}"></script>
+    <script th:src="@{/common/js/lib/flowchart.min.js}"></script>
+    <script th:src="@{/common/js/lib/jquery.flowchart.min.js}"></script>
+    <script th:src="@{/common/js/editormd.amd.min.js}"></script>
+</head>
+<body>
+<!--导航栏-->
+<div th:insert="~{navigation :: nav}"></div>
+<div class="container-fluid " style="margin-left: 130px; margin-right: 130px; background: #ffffff;">
+    <div class="row">
+        <!--内容左部-->
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-9" style="background: #e9ecef;">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background: #fff;">
+                <h2 style="padding-bottom: 16px;"><span th:text="${articleDTO.title}"></span></h2>
+                <a href="#">
+                    <img alt="头像图片" class="img-circle" style="width: 32px; height: 32px;"
+                         th:src="${articleDTO.user.avatarUrl}">
+                </a>
+                <span style="color: #999;">
+                <strong><span style="color: #00965e;" th:text="${articleDTO.user.name}"></span></strong>
+                &ensp;&ensp;发布于：<span class="glyphicon glyphicon-dashboard" style="color: #999;"
+                                      th:text="${#dates.format(articleDTO.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
+                &ensp;&#124;&ensp;阅读&ensp;<span style="color: #999;" th:text="${articleDTO.viewCount}"></span>
+                <span style="color: #999;" aria-hidden="true">&squf;</span>
+                回答&ensp;<span style="color: #999;" th:text="${articleDTO.commentCount}"></span>
+                &ensp;<a th:href="@{'/publish/' + ${articleDTO.articleId}}" style="text-decoration: none; color: #00965e;"
+                         th:if="${session.user != null && session.user.userId == articleDTO.creator}">编辑文章</a>
+                </span>
+                <div class="article-content">
+                    <div id="markdown-view" style="padding: 0;">
+                        <textarea style="display:none;" th:text="${articleDTO.content}"></textarea>
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            var testView = editormd.markdownToHTML("markdown-view", {
+                                htmlDecode: "style,script,iframe",  // you can filter tags decode
+                                taskList: true,
+                                tex: true,  // 默认不解析
+                                flowChart: true,  // 默认不解析
+                                sequenceDiagram: true,  // 默认不解析
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+
+            <!--回答输入框-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin: 20px 0; background: #fff;">
+                <h3>提交回答</h3>
+                <hr>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
+                    <div class="media" style="margin-bottom: 20px;">
+                        <div class="media-left">
+                            <a href="#">
+                                <img class="media-object img-rounded" style="width: 32px; height: 32px;"
+                                     th:src="${session.user != null ? session.user.avatarUrl : '/image/user.png'}">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <h5 class="media-heading">
+                                <strong><span style="color: #00965e; position: relative; top: 8px;"
+                                              th:text="${session.user != null ? session.user.name : '匿名用户'}"></span></strong>
+                            </h5>
+                        </div>
+                    </div>
+                    <input type="hidden" id="article_id" th:value="${articleDTO.articleId}">
+                    <textarea style="margin-bottom: 20px;" class="form-control comment" rows="6"
+                              id="comment_content"></textarea>
+                    <button type="button" class="btn btn-success" style="float: right;" onclick="post()">回复</button>
+                </div>
+            </div>
+            <!--回答-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background: #fff;">
+                <h3>
+                    <span th:text="${articleDTO.commentCount}"></span>&ensp;个回答
+                </h3>
+                <hr>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:each="commentDTO : ${commentDTOList}">
+                    <div class="media">
+                        <div class="media-left">
+                            <a href="#">
+                                <img class="media-object img-rounded img-circle" style="width: 32px; height: 32px;"
+                                     th:src="${commentDTO.user.avatarUrl}">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <h5 class="media-heading">
+                                <span th:text="${commentDTO.user.name}" style="color: #00965e;"></span>
+                            </h5>
+                            <div th:text="${commentDTO.content}" style="margin-top: 10px;"></div>
+                            <div class="menu" style="margin-top: 10px; color: #999">
+                                <span class="glyphicon glyphicon-thumbs-up icon"></span>
+                                <span th:data-id="${commentDTO.commentId}" onclick="collapseComments(this)">
+                                <span class="glyphicon glyphicon-comment icon"></span>
+                                <span th:text="${commentDTO.commentCount}"></span>
+                                </span>
+                                <span class="pull-right glyphicon glyphicon-dashboard"
+                                      th:text="${#dates.format(articleDTO.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
+                            </div>
+                            <!--二级评论输入框-->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse"
+                                 th:id="${'comment-' + commentDTO.commentId}" style="margin-top: 10px;
+                            padding-top: 15px; border: 1px solid #eee; border-radius: 5px;}">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 10px;">
+                                    <textarea style="margin-bottom: 10px;" class="form-control comment"
+                                              rows="4" placeholder="评论一下" th:id="${'input-'+commentDTO.commentId}"></textarea>
+                                    <button type="button" class="btn btn-success" style="float: right;" onclick="comment2(this)" th:data-id="${commentDTO.commentId}">回复</button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-3" style="padding: 0;">
+            <br class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <p style="padding: 0 15px;">作者：
+                <strong><span style="color: #00965e;" th:text="${articleDTO.user.name}"></span></strong>
+            </p>
+            <hr class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <h4 style="padding: 0 15px;">相关文章</h4>
+            <ul class="comment-related" style="margin-left: 15px;">
+                <li style="margin-bottom: 2px;" th:each="related : ${articleDTOList}">
+                    <a style="text-decoration: none" th:href="@{'/article/'+${related.articleId}}"
+                       th:text="${related.title}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

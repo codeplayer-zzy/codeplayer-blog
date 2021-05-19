@@ -1,0 +1,113 @@
+body{
+    background: #e9ecef;
+}
+.index-navigation{
+    background: #ffffff;
+}
+.index-write{
+    position: relative;
+    top: 8px;
+    margin-right: 15px;
+}
+.index-media-reply{
+    border: 1px solid #00965e;
+    text-align:center;
+    color:#00965e;;
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+.index-answer {
+    background: #e9ecef;
+}
+.index-media-read{
+    text-align:center;
+    float: left;
+    margin-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.index-publish{
+    float: right;
+}
+
+.index-jumbotron{
+    line-height: 30px;
+}
+.index-page{
+    float: right;
+}
+.index-messages{
+    margin-left: 3px;
+}
+
+.article-content{
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+.editor-article :hover{
+    color: #00a8c6;
+}
+
+
+.particle-div{
+    top: 8px;
+}
+.particle-p{
+    top: 15px;
+    font-size: 15px;
+    margin:0 auto;
+}
+.particle-container{
+    background: #e9ecef;
+}
+.particle-navigation {
+    background: #ffffff;
+}
+.publish-tag-tab {
+    display: none;
+}
+.publish-tag-tab .tab-pane{
+    margin-bottom: 6px;
+    margin-top: 6px;
+}
+.publish-tag-tab .label-info{
+    white-space: normal;
+    margin-right: 10px;
+    line-height: 35px;
+    font-size: 15px;
+}
+.icon{
+    margin-right: 5px;
+    font-size: 15px;
+    cursor: pointer;
+}
+.menu .icon:hover{
+    color: #499ef3;
+}
+
+.comment-img {
+    width: 32px;
+    height: 32px;
+}
+.comment-name{
+    color: #00965e;
+}
+.comment-content{
+    margin-top: 10px;
+}
+.comment-gmtCreate{
+    color: #999;
+    margin-bottom: 20px;
+}
+.comment-related{
+    list-style: none;
+    padding-left: 0;
+}
+
+
+
+

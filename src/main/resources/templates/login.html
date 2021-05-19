@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>CodePlayer-Blog</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 360浏览器急速模式 -->
+    <meta name="renderer" content="webkit">
+    <!-- 避免IE使用兼容模式 -->
+    <meta http-equiv="X-UA-Compatible"
+          content="IE=edge">
+    <link rel="stylesheet" th:href="@{login/css/style.css}">
+    <script th:src="@{common/js/jquery-3.6.0.min.js}"></script>
+</head>
+<body>
+<nav>
+    <div class="content">
+        <div class="form signin">
+            <h2>欢迎回来</h2>
+            <label>
+                <span>用户名</span>
+                <input type="text" value="codeplayer" placeholder="请输入用户名" id="username"/>
+                <span></span>
+            </label>
+            <label>
+                <span>密码</span>
+                <input type="password" value="123456" placeholder="请输入密码" id="password"/>
+            </label>
+            <label>
+                <span>验证码</span>
+                <input type="text" name="validateCode" id="validateCode" placeholder="请点击验证码" onclick="validate()"/>
+                <img onclick="this.src='/kaptcha/kaptchaImage?d='+new Date().getTime()" width="85%" id="validate"/>
+            </label>
+            <button type="button" class="submit" onclick="login()">登 录</button>
+        </div>
+        <div class="sub-cont">
+            <div class="img">
+                <div class="img__text m--up">
+                    <h2>还未注册？</h2>
+                    <p>立即注册，发现大量机会！</p>
+                </div>
+                <div class="img__text m--in">
+                    <h2>已有帐号？</h2>
+                    <p>有帐号就登录吧，好久不见了！</p>
+                </div>
+                <div class="img__btn">
+                    <span class="m--up">注 册</span>
+                    <span class="m--in">登 录</span>
+                </div>
+            </div>
+            <div class="form sign-up">
+                <h2>立即注册</h2>
+                <label>
+                    <span>用户名</span>
+                    <input type="text" placeholder="请输入用户名"/>
+                </label>
+                <label>
+                    <span>密码</span>
+                    <input type="password" placeholder="请输入密码"/>
+                </label>
+                <button type="button" class="submit">注 册</button>
+                <button type="button" class="fb-btn">使用<span>facebook</span>帐号注册</button>
+            </div>
+        </div>
+    </div>
+</nav>
+<script type="text/javascript">
+    document.querySelector('.img__btn').addEventListener('click', function () {
+        document.querySelector('.content').classList.toggle('s--signup')
+    })
+
+    function validate() {
+        //触发 img
+        $("#validate").trigger('click');
+    }
+
+    function login() {
+        let username = $("#username").val();
+        let password = $("#password").val();
+        let validateCode = $("#validateCode").val();
+        if (username === "" || password === "" || validateCode === "") {
+            confirm("用户名、密码或验证码不能为空！！");//message弹窗
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/login",
+                dataType: "json",
+                data: {username: username, password: password,validateCode: validateCode},
+                success: function (result) {
+                    if (result.code === 200) {
+                        window.location.href = '/index';
+                    } else {
+                        if (result.code === 2010){  //判断验证码
+                            confirm(result.message);//message弹窗
+                        }else if (result.code === 100){
+                            confirm(result.message);
+                        }else {
+                            confirm("服务冒烟了，要不然你稍后再试试！！")
+                        }
+                    }
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

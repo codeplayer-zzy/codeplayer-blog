@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>PublishArticle</title>
+    <meta name="description" content="codeplayer-blog">
+    <!-- 360浏览器急速模式 -->
+    <meta name="renderer" content="webkit">
+    <link rel="stylesheet" href="/common/css/bootstrap.css" th:href="@{/common/css/bootstrap.css}">
+    <link rel="stylesheet" href="/front/style.css" th:href="@{/front/style.css}">
+    <!-- 全局js -->
+    <script src="/common/js/jquery-3.6.0.min.js" th:src="@{/common/js/jquery-3.6.0.min.js}"></script>
+    <script src="/common/js/bootstrap.js" th:src="@{/common/js/bootstrap.js}"></script>
+    <script src="/common/js/editormd.min.js" th:src="@{/common/js/editormd.min.js}"></script>
+    <script src="/common/js/plugins/image-dialog/image-dialog.js" th:src="@{/common/js/plugins/image-dialog/image-dialog.js}"></script>
+    <link rel="stylesheet" href="/common/css/editormd.min.css" th:href="@{/common/css/editormd.min.css}">
+    <link rel="stylesheet" href="/common/js/lib/codemirror/addon/dialog/dialog.css" th:src="@{/common/js/lib/codemirror/addon/dialog/dialog.css}">
+    <script src="/common/js/lib/codemirror/codemirror.min.js" th:src="@{/common/js/lib/codemirror/codemirror.min.js}"></script>
+    <link rel="stylesheet" href="/common/js/lib/codemirror/codemirror.min.css" th:href="@{/common/js/lib/codemirror/codemirror.min.css}">
+    <link rel="stylesheet" href="/common/js/lib/codemirror/addon/fold/foldgutter.css" th:href="@{/common/js/lib/codemirror/addon/fold/foldgutter.css}">
+    <link rel="stylesheet" href="/common/js/lib/codemirror/addon/search/matchesonscrollbar.css" th:href="@{/common/js/lib/codemirror/addon/search/matchesonscrollbar.css}">
+
+</head>
+<body class="particle-container">
+<nav class="navbar navbar-default particle-navigation">
+    <div class="container-fluid">
+        <div class="navbar-header col-lg-4 col-xs-4 col-md-4 col-sm-4">
+            <a class="navbar-brand" th:href="@{/index}">CodePlayerBlog</a>
+        </div>
+        <div class="center-block btn-group btn-group-lg particle-p col-lg-4 col-xs-4 col-md-4 col-sm-4" role="group">写文章</div>
+        <div class="btn-group particle-div col-lg-4 col-xs-4 col-md-4 col-sm-4" role="group">
+            <button type="submit" class="btn btn-success navbar-right" onclick="from()" id="particle-button">发布文章</button>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <form action="/particle" method="post" id="particle-form">
+                <input type="hidden" name="articleId" th:value="${articleId}">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="title" name="title" th:value="${title}" autocomplete="off" placeholder="问题标题...">
+                </div>
+                <div class="form-group">
+                    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error != null}"></div>
+                </div>
+                <div class="form-group">
+<!--                    <button type="button" class="btn btn-success"></button>-->
+<!--                    <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                    <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag" autocomplete="off" placeholder="输入标签，以， 号分隔"
+                           onclick="showSelectTag(this)">
+                </div>
+
+                <div class="publish-tag-tab" id="select-tag">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" th:each="selectCategory,selectCategoryStat : ${tags}"
+                            th:class="${selectCategoryStat.first ? 'active' : ''}">
+                            <a th:href="${'#' + selectCategory.categoryName}" role="tab"
+                               data-toggle="tab" th:text="${selectCategory.categoryName}">
+                            </a>
+                        </li>
+                    </ul>
+                    <div>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane" th:each="selectCategory : ${tags}"
+                             th:class="${selectCategoryStat.first ? 'active tab-pane' : 'tab-pane'}"
+                             th:id="${selectCategory.categoryName}">
+                        <span class="label label-info" style="white-space: normal;" th:each="selectTag : ${selectCategory.tagsName}">
+                            <span class="glyphicon glyphicon-tag" onclick="selectTag(this)" th:data-tag="${selectTag}"
+                                  th:text="${selectTag}"></span>
+                        </span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="form-group" id="article-editor">
+                    <textarea class="form-control" style="display:none;" id="content" name="content" th:text="${content}"></textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    //editormd
+    $(function() {
+        let editor = editormd("article-editor", {
+            placeholder: "此处开始编写文章的内容...",
+            width: "100%",
+            height: 600,
+            delay: 0,              // Delay parse markdown to html, Uint : ms
+            lineNumbers: false,    //行数字
+            path : "/common/js/lib/", // Autoload modules mode, codemirror, marked... dependents libs path
+            saveHTMLToTextarea: true, //注意3：这个配置，方便post提交表单
+            /**上传图片相关配置如下*/
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "article", //注意你后端的上传图片服务地址
+            flowChart : true, //开启流程图
+            sequenceDiagram : true, //开启时序图
+            taskList : true, //任务列表
+            tex  : true, //数学公式
+            codeFold : true, //代码折叠
+        });
+    });
+
+    //提交表单
+    $("#particle-button").click(function(){
+        $("#particle-form").submit();
+    });
+
+    // 显示标签框
+    function showSelectTag(e) {
+        let closeTag = e.getAttribute("closeTag");
+        if (closeTag){
+            $("#select-tag").hide();
+            e.removeAttribute("closeTag");
+        }else{
+            e.setAttribute("closeTag","in");
+            $("#select-tag").show();
+        }
+    }
+
+    //点击标签
+    function selectTag(e){
+        let value = e.getAttribute("data-tag");
+        let previous = $("#tag").val();
+        if (previous.indexOf(value) === -1) {
+            if (previous) {
+                $("#tag").val(previous + "," + value);
+            }else {
+                $("#tag").val(value);
+            }
+        }
+    }
+</script>
+</html>

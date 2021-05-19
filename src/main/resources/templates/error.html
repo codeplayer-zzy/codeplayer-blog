@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>错误请求</title>
+    <meta name="description" content="CodePlayerBlog">
+    <!-- 360浏览器急速模式 -->
+    <meta name="renderer" content="webkit">
+    <!-- 避免IE使用兼容模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" th:href="@{/common/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/front/style.css}">
+    <!-- 全局js -->
+    <script th:src="@{/common/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/common/js/bootstrap.js}"></script>
+
+</head>
+<body>
+<!--导航栏-->
+<div th:insert="~{navigation :: nav}"></div>
+<div style="margin: 140px;">
+    <h1>错误请求</h1><br>
+    <p th:text="${message}">服务太热啦，要不然稍等下再来试试</p>
+    <p><a class="btn btn-primary btn-lg" href="/" role="button">回到主页</a></p>
+</div>
+</body>
+</html>

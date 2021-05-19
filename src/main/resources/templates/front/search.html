@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>CodePlayer-Blog</title>
+    <meta name="description" content="CodePlayerBlog">
+    <!-- 360浏览器急速模式 -->
+    <meta name="renderer" content="webkit">
+    <link rel="stylesheet" th:href="@{/common/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/front/style.css}">
+    <!-- 全局js -->
+    <script th:src="@{/common/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/common/js/bootstrap.js}"></script>
+</head>
+<body>
+<!--导航栏-->
+<div th:insert="~{navigation :: nav}"></div>
+
+<div class="container-fluid" style="margin-left: 130px; margin-right: 130px; background: #ffffff;">
+    <div class="row">
+        <!--内容左部-->
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-9">
+            <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>&nbsp;搜索结果</h2>
+            <hr class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <div class="jumbotron index-jumbotron" style="padding: 0px; margin-bottom: 0px; background: #ffffff;" th:each="articleList: ${articleList}">
+                <div class="index-media-reply">
+                    <span th:text="${articleList.commentCount}"></span><br>
+                    <span>回答</span>
+                </div>
+                <div class="index-media-read" style="color: #999;">
+                    <span style="color: #999;" th:text="${articleList.viewCount}"></span><br>
+                    <span style="color: #999;">阅读</span>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        <a th:href="@{'/article/'+${articleList.articleId}}" th:text="${articleList.title}" style="text-decoration: none;"></a>
+                    </h4>
+                    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0px; margin-top: 5px;">
+                        <span class="label label-success" style="margin-right: 10px;" th:each="tag : ${articleList.tag.split(',')}">
+                            <span class="glyphicon glyphicon-tags"></span>
+                            <span class="label label-success" th:text="${tag}"></span>
+                        </span>
+                        <span class="glyphicon glyphicon-time" style="color: #999; float: right; margin-top: 8px;">
+                            <span class="index-publish" th:text="${#dates.format(articleList.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
+                        </span>
+                    </div>
+                </div>
+                <hr class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            </div>
+        </div>
+        <!--内容右部-->
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-3">热门文章</div>
+    </div>
+</div>
+</body>
+</html>

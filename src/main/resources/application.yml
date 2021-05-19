@@ -1,0 +1,60 @@
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为80
+  port: 80
+  servlet:
+    # 应用的访问路径
+    context-path: /
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: utf-8
+
+
+spring:
+  # 配置数据源
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost/codeplayer-blog?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    # 配置RabbitMq
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: zzy
+    password: zhang123123.
+    virtual-host: /zzy_host
+
+  # 禁用ThymeLeaf缓存
+  thymeleaf:
+    cache: false
+
+# 配置保存日志相关
+logging:
+  level:
+    root: info
+    com:
+      codepalyer:
+        mapper: debug
+  file:
+    name: logs/codeplayer-blog.log
+  logback:
+    rollingpolicy:
+      total-size-cap: 200MB
+      max-history: 30
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+github:
+  client:
+    id: 22953bff1e584f77f4f3
+    secret: 80f5b3ee7560be4a85e952c17749dee972f53bfa
+  redirect:
+    url: http://localhost:80/callback
+
+
