@@ -19,13 +19,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
-    # 配置RabbitMq
+  # 配置RabbitMq
   rabbitmq:
     host: 127.0.0.1
     port: 5672
-    username: zzy
-    password: zhang123123.
-    virtual-host: /zzy_host
+    username: guest
+    password: guest
+    virtual-host: /
 
   # 禁用ThymeLeaf缓存
   thymeleaf:
