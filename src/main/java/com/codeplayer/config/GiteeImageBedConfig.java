@@ -11,17 +11,17 @@ public interface GiteeImageBedConfig {
     /**
      * 码云分配的私人令牌Token
      */
-    String ACCESS_TOKEN = "f5e7eb62c07bab59e2c9697dd2116071";
+    String ACCESS_TOKEN = "xxx";
 
     /**
      * 码云用户名
      */
-    String OWNER = "zhangzuyi";
+    String OWNER = "xxx";
 
     /**
      * 仓库名称
      */
-    String REPO_NAME = "codeplayer-blog-table";
+    String REPO_NAME = "xxx";
 
     /**
      * 上传图片的message

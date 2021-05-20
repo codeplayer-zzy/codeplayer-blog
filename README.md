@@ -1,0 +1,47 @@
+## CodePlayerBlog
+
+## 实现功能
+开源论坛系统，现有功能：提问、回复、通知、GitHub登录、搜索、热门标签、kaptcha 验证码、Gitee 图床。功能持续更新中...
+
+## 使用技术
+| 后端技术 | 链接 |
+| ------------ | ------------ |
+| Java 11  | https://www.oracle.com/java/technologies/javase-downloads.html  |
+|  Spring Boot 2.4.4 |  http://projects.spring.io/spring-boot/#quick-start  |
+| MyBatis |  https://mybatis.org/mybatis-3/zh/index.html  |
+| MySQL  | https://www.runoob.com/mysql/mysql-tutorial.html  |
+| Lombok  | https://www.projectlombok.org  |
+| GitHub OAuth  | https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/  |
+| Editor.md  | https://pandao.github.io/editor.md/  |
+| kaptcha  | https://github.com/penggle/kaptcha  |
+| Elasticsearch 7.9.3 | https://www.elastic.co/cn/downloads/past-releases  |
+| RabbitMQ 3.8.14 | https://github.com/rabbitmq/rabbitmq-server/releases  |
+
+| 前端技术 | 链接 |
+| ------------ | ------------ |
+|  BootStrap v3 |  https://v3.bootcss.com/  |
+|  jQuery |  https://jquery.com/download/  |
+|  jQuery ajax |  https://www.jquery123.com/category/ajax/global-ajax-event-handlers/  |
+|  Gitee 图床 |  https://gitee.com/zhangzuyi/codeplayer-blog-table |
+
+## 本地运行手册
+1. 安装必备工具
+JDK 11 （安装JDK8也可运行，但是Elasticsearch不能运行）、IDEA或其他、MYSQL
+2. 克隆代码到本地
+```sh
+git clone https://github.com/codeplayer-zzy/codeplayer-blog.git
+````
+3. 将resources目录下的codeplayer-blog.sql导入新创建的数据库
+4. 将application.yml文件配置好
+5. 将com.codeplayer.config目录下的GiteeImageBedConfig 类配置好（Gitee图床，可省略）
+6. 运行项目
+7. 访问项目
+```
+http://localhost:80
+```
+
+## 联系我
+有任何问题可以加我QQ2775152443，同样也欢迎一起交流学习。
+
+
+

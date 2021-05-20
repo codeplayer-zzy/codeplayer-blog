@@ -1,12 +1,9 @@
 package com.codeplayer.advice;
 
 import com.alibaba.fastjson.JSON;
-import com.codeplayer.controller.SysLoginController;
 import com.codeplayer.dto.ResultDTO;
 import com.codeplayer.exception.CustomizeErrorCode;
 import com.codeplayer.exception.CustomizeException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
