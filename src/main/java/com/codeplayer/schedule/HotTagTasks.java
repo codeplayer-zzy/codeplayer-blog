@@ -24,7 +24,7 @@ public class HotTagTasks {
     private static final Logger log = LoggerFactory.getLogger(HotTagTasks.class);
 
     //权重计算priority=questionCount*5+commentCount*1+likeCount*10+viewCount/10
-    @Scheduled(cron = "0 0 6 * * ?")//每天早上六点触发一次0 0 6 * * ? ，五秒钟执行一次*/5 * * * * ?
+    @Scheduled(cron = "*/5 * * * * ?")//每天早上六点触发一次0 0 6 * * ? ，五秒钟执行一次*/5 * * * * ?
     public void hotTagSchedule() {
         log.info("hotTagSchedule start {}", new Date());
 

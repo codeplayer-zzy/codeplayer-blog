@@ -11,7 +11,7 @@ public interface GiteeImageBedConfig {
     /**
      * 码云分配的私人令牌Token
      */
-    String ACCESS_TOKEN = "f5e7eb62c07bab59e2c9697dd2116071";
+    String ACCESS_TOKEN = "7fa6dd6b6506838d8a3c8f5d684673af";
 
     /**
      * 码云用户名

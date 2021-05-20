@@ -97,10 +97,11 @@
             </div>
             <hr class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0 15px;">
-                 <span class="label label-primary" style="margin-right: 10px; white-space: normal;"
-                       th:each="tag : ${hotTags}">
-                     <a class="label label-primary" th:text="${tag}" th:href="@{/index(tag=${tag})}"></a>
-                 </span>
+                <div class="label label-primary" style="margin-right: 10px; margin-bottom: 7px; white-space: normal;"
+                     th:each="tag : ${hotTags}">
+                    <a class="label label-primary" th:text="${tag}" th:href="@{/index(tag=${tag})}"></a>
+                </div>
+
             </div>
         </div>
     </div>
