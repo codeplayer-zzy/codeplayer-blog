@@ -26,12 +26,14 @@ public class SysIndexController {
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
                         @RequestParam(name = "size", defaultValue = "5") Integer size,
-                        @RequestParam(name = "tag", required = false) String tag
+                        @RequestParam(name = "tag", required = false) String tag,
+                        @RequestParam(name = "sort", required = false) String sort
                         ){
-        PageDTO<ArticleDTO> pageDTO = articleService.articlePageList(page,size,tag);
+        PageDTO<ArticleDTO> pageDTO = articleService.articlePageList(page,size,tag,sort);
         List<String> hotTags = hotTagCache.getHots();
         model.addAttribute("hotTags",hotTags);
         model.addAttribute("tag",tag);
+        model.addAttribute("sort",sort);
         model.addAttribute("pageDTO",pageDTO);
         return "front/index";
     }

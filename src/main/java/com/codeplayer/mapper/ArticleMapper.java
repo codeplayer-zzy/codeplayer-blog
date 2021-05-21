@@ -20,16 +20,28 @@ public interface ArticleMapper {
     @Select({"<script> " +
             "SELECT * FROM article " +
             "   <where> " +
-            "       <if test=\"tag != null and tag != ''\">AND tag regexp #{tag}</if> " +
+            "       <if test=\"tag != null and tag != ''\">AND tag = #{tag}</if> " +
+            "       <if test=\"sort != null and sort != '' and sort == 'no'\">AND comment_count = 0</if> " +
+            "       <if test=\"sort != null and sort != '' and sort == 'good'\">AND comment_count = 5</if> " +
+            "       <if test=\"time != null and time != ''\">AND gmt_create > #{time}</if> " +
             "   </where> " +
-            "ORDER BY gmt_create DESC LIMIT #{offset},#{size}" +
+            "       <if test=\"sort == null and sort != ''\">ORDER BY gmt_create DESC</if> " +
+            "       <if test=\"sort != null and sort != '' and sort == 'new'\">ORDER BY gmt_create DESC</if> " +
+            "       <if test=\"sort != null and sort != '' and sort == 'no'\">ORDER BY gmt_create DESC</if> " +
+            "       <if test=\"sort != null and sort != '' and sort == 'good'\">ORDER BY gmt_create DESC</if> " +
+            "       <if test=\"sort != null and sort != '' and (sort == 'hot7' || sort == 'hot30' || sort == 'hot')\">ORDER BY comment_count DESC</if> " +
+            "   LIMIT #{offset},#{size} " +
             "</script>"})
     List<Article> articlePageList(ArticleQueryDTO articleQueryDTO);
+
 
     @Select({"<script> " +
             "SELECT count(1) FROM article " +
             "   <where> " +
-            "       <if test=\"tag != null and tag != ''\">AND tag regexp #{tag}</if> " +
+            "       <if test=\"tag != null and tag != ''\">AND tag = #{tag}</if> " +
+            "       <if test=\"sort != null and sort != '' and sort == 'no'\">AND comment_count = 0</if> " +
+            "       <if test=\"sort != null and sort != '' and sort == 'good'\">AND comment_count = 5</if> " +
+            "       <if test=\"time != null and time != ''\">AND gmt_create > #{time}</if> " +
             "   </where> " +
             "</script>"})
     Integer countByArticleQueryDTO(ArticleQueryDTO articleQueryDTO);

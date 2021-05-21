@@ -5,6 +5,7 @@ import com.codeplayer.dto.ArticleQueryDTO;
 import com.codeplayer.dto.PageDTO;
 import com.codeplayer.entity.Article;
 import com.codeplayer.entity.User;
+import com.codeplayer.enums.SortEnum;
 import com.codeplayer.service.ArticleService;
 import com.codeplayer.service.BaseService;
 import org.apache.commons.lang3.StringUtils;
@@ -56,15 +57,28 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
      * @param page
      * @param size
      * @param tag
+     * @param sort
      * @return 文章分页查找
      */
     @Override
-    public PageDTO<ArticleDTO> articlePageList(Integer page, Integer size, String tag) {
+    public PageDTO<ArticleDTO> articlePageList(Integer page, Integer size, String tag, String sort) {
         ArticleQueryDTO articleQueryDTO = new ArticleQueryDTO();
         if (StringUtils.isNotBlank(tag)) {
             tag = tag.replace("+", "").replace("*", "").replace("?", "");
             articleQueryDTO.setTag(tag);
         }
+        for (SortEnum sortEnum : SortEnum.values()) {
+            if (sortEnum.name().toLowerCase(Locale.ENGLISH).equals(sort)){
+                articleQueryDTO.setSort(sort);
+                if (sortEnum == SortEnum.HOT7) {
+                    articleQueryDTO.setTime(System.currentTimeMillis() - 1000L * 60 * 60 * 24 * 7);
+                }else if (sortEnum == SortEnum.HOT30) {
+                    articleQueryDTO.setTime(System.currentTimeMillis() - 1000L * 60 * 60 * 24 * 30);
+                }
+                break;
+            }
+        }
+
         Integer totalPage;
         Integer totalCount = articleMapper.countByArticleQueryDTO(articleQueryDTO);
         if (totalCount % size == 0){

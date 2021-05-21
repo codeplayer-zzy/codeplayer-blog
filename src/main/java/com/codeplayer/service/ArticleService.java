@@ -12,7 +12,7 @@ public interface ArticleService {
 
     void createOrUpdate(Article article);
 
-    PageDTO<ArticleDTO> articlePageList(Integer page, Integer size, String tag);
+    PageDTO<ArticleDTO> articlePageList(Integer page, Integer size, String tag, String sort);
 
     PageDTO<ArticleDTO> profileArticlePageList(Long userId, Integer page, Integer size);
 

@@ -19,11 +19,29 @@
 <div class="container-fluid" style="margin-left: 130px; margin-right: 130px; background: #ffffff;">
     <div class="row">
         <!--内容左部-->
-        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-9" style="background: #e9ecef; padding-left: 0;">
-            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="background: #fff;">
-                <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>&nbsp;问答</h2>
-                <hr>
-                <div class="jumbotron index-jumbotron" style="padding: 0px; margin-bottom: 0px; background: #ffffff;"
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-9" style="background: #e9ecef; padding: 0 16px;">
+            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0; margin-top: 20px; height: 55px">
+                <h2 style="display: inline;">&nbsp;问答</h2>
+                <div style="display: inline;float: right; position: relative; top: 11px; right: 390px;">
+                    <a th:class="${sort == 'new' || sort == null ? 'active' : ''}" th:href="@{/index(sort='new')}" style="text-decoration: none;">
+                        <h4 th:style="'display: inline; position:relative; right: 20px; color: #000'+${sort == 'new' || sort == null ? 'color: #337ab7;' : ''}">最新</h4>
+                    </a>
+                    <a th:class="${sort == 'hot' ? 'active' : ''}" th:href="@{/index(sort='hot')}" style="text-decoration: none;">
+                        <h4 th:style="'display: inline; position:relative; color: #000;'+${sort == 'hot' || sort == '' ? 'color: #337ab7;' : ''}">最热</h4>
+                    </a>
+                    <a th:class="${sort == 'no' ? 'active' : ''}" th:href="@{/index(sort='no')}" style="text-decoration: none;">
+                        <h4 th:style="'display: inline; position:relative; left: 20px; color: #000;'+${sort == 'no' || sort == '' ? 'color: #337ab7;' : ''}">待回答</h4>
+                    </a>
+                    <a th:class="${sort == 'hot7' ? 'active' : ''}" th:href="@{/index(sort='hot7')}" style="text-decoration: none;">
+                        <h4 th:style="'display: inline; position:relative; left: 40px; color: #000;'+${sort == 'hot7' || sort == '' ? 'color: #337ab7;' : ''}">周榜</h4>
+                    </a>
+                    <a th:class="${sort == 'hot30' ? 'active' : ''}" th:href="@{/index(sort='hot30')}" style="text-decoration: none;">
+                        <h4 th:style="'display: inline; position:relative; left: 60px; color: #000;'+${sort == 'hot30' || sort == '' ? 'color: #337ab7;' : ''}">月榜</h4>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 15px 0 0 0; background: #fff;">
+                <div class="jumbotron index-jumbotron" style="margin: 15px;padding: 0; background: #ffffff;"
                      th:each="articleDTO : ${pageDTO.data}">
                     <div class="index-media-reply">
                         <span th:text="${articleDTO.commentCount}"></span><br>
@@ -40,20 +58,20 @@
                         </h4>
                         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0px; margin-top: 5px;">
                             <span class="label label-success" style="margin-right: 10px; white-space: normal;"
-                              th:each="tag : ${articleDTO.tag.split(',')}">
+                                  th:each="tag : ${articleDTO.tag.split(',')}">
                                 <span class="glyphicon glyphicon-tags"></span>
                                 <span class="label label-success" th:text="${tag}"></span>
                             </span>
                             <span class="glyphicon glyphicon-time" style="color: #999; float: right; margin-top: 8px;">
                                 <span class="index-publish"
-                                        th:text="${#dates.format(articleDTO.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
+                                      th:text="${#dates.format(articleDTO.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
                             </span>
                         </div>
                     </div>
                     <hr>
                 </div>
 
-                <nav aria-label="Page navigation">
+                <nav aria-label="Page navigation" style="margin: 0 15px;">
                     <ul class="pagination">
                         <li th:if="${pageDTO.showFirstPage}">
                             <a th:href="@{/index(page=1,tag=${tag})}" aria-label="Previous">
@@ -81,6 +99,7 @@
                     </ul>
                 </nav>
             </div>
+
         </div>
 <!--        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-9">-->
 <!--            <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>&nbsp;问答</h2>-->
@@ -93,11 +112,11 @@
         <!--内容右部-->
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-3" style="padding: 0;">
             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0;">
-                <h3 class="col-md-12 col-xs-12 col-sm-12 col-lg-12">热门标签</h3>
+                <h2 class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="margin-bottom: 2px;">热门标签</h2>
             </div>
             <hr class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0 15px;">
-                <div class="label label-primary" style="margin-right: 10px; margin-bottom: 7px; white-space: normal;"
+                <div class="label label-primary" style="margin-right: 10px;line-height: 30px; white-space: normal;"
                      th:each="tag : ${hotTags}">
                     <a class="label label-primary" th:text="${tag}" th:href="@{/index(tag=${tag})}"></a>
                 </div>

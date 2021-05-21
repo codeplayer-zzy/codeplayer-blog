@@ -3,11 +3,14 @@
 ## 实现功能
 开源论坛系统，现有功能：提问、回复、通知、GitHub登录、搜索、热门标签、kaptcha 验证码、Gitee 图床。功能持续更新中...
 
+## 增加功能
+2021/5/21 ：增加查看文章的最新、最热、待回复功能。
+
 ## 演示图片
 [![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489946035_cf4f81eddf3b453b997a10811d60409f.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489946035_cf4f81eddf3b453b997a10811d60409f.png)
 [![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489973354_415ff14bcf6a49c6b0ebd78227b90fad.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489973354_415ff14bcf6a49c6b0ebd78227b90fad.png)
 [![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490024016_935fea0eed57449fb90f7a0d007c719f.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490024016_935fea0eed57449fb90f7a0d007c719f.png)
-[![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490066037_198a39eaacf64ab781224a30473ed749.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490066037_198a39eaacf64ab781224a30473ed749.png)
+[![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-21/1621609840846_f5340d7fcde54e1499afdea5addedfcd.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-21/1621609840846_f5340d7fcde54e1499afdea5addedfcd.png)
 [![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490099345_b2f8c329ef1449449fc5b66c44f17e8e.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490099345_b2f8c329ef1449449fc5b66c44f17e8e.png)
 
 
