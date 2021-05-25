@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class NotificationController {
+public class SysNotificationController {
     @Autowired
     private NotificationService notificationService;
 

@@ -24,7 +24,7 @@ public class SysIndexController {
      */
     @GetMapping({"/","/index"})
     public String index(Model model,
-                        @RequestParam(name = "page", defaultValue = "1") Integer page,
+                        @RequestParam(name = "page", defaultValue = "0") Integer page,
                         @RequestParam(name = "size", defaultValue = "5") Integer size,
                         @RequestParam(name = "tag", required = false) String tag,
                         @RequestParam(name = "sort", required = false) String sort

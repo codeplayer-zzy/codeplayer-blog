@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title text="CodePlayer-Bolg"></title>
+    <meta name="description" content="CodePlayerBlog">
+
+    <link rel="stylesheet" th:href="@{/common/css/bootstrap.css}">
+    <link rel="stylesheet" href="/front/style.css" th:href="@{/front/style.css}">
+    <script src="/common/js/jquery-3.6.0.min.js" th:src="@{/common/js/jquery-3.6.0.min.js}"></script>
+    <script src="/common/js/bootstrap.js" th:src="@{/common/js/bootstrap.js}"></script>
+    <script src="/front/codeplayer.js" th:src="@{/front/codeplayer.js}"></script>
+
+</head>
+<body style="background: #fff;">
+<!--导航栏-->
+<div th:fragment="nav_2">
+    <nav class="navbar navbar-default">
+        <div class="row" style="box-shadow: 0px 2px 10px 0px rgb(0 0 0 / 10%), 0 1px rgb(0 0 0 / 10%);">
+            <!--导航条左空白-->
+            <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
+            <!--导航条内容-->
+            <div class="container-fluid col-md-10 col-xs-10 col-sm-10 col-lg-10">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">CodePlayerBlog</span>
+                    </button>
+                    <a class="navbar-brand" th:href="@{/index}">CodePlayerBlog</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <form class="navbar-form navbar-left" action="/search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="content" placeholder="搜索问题 ">
+                        </div>
+                        <button type="submit" class="btn btn-default" th:href="@{/search}">搜索</button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="btn-group index-write">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                撰写 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a th:href="@{/particle}">写文章</a></li>
+                                <li><a href="#">记笔记</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a th:href="@{/profile/draft}">草搞箱</a></li>
+                            </ul>
+                        </li>
+                        <li><a th:href="@{/profile/replies}">通知<span class="badge index-messages" th:text="${session.unreadCount}"></span></a></li>
+                        <li class="dropdown" th:if="${session.user != null}">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false" th:text="${session.user.getName()}">
+                                <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a th:href="@{/profile/article}">我的文章</a></li>
+                                <li><a href="#">个人资料</a></li>
+                                <li><a th:href="@{/logout}">登出</a></li>
+                            </ul>
+                        </li>
+                        <li><a th:href="@{/login}" th:if="${session.user == null}">登录</a></li>
+                        <li>
+                            <a th:href="${'https://github.com/login/oauth/authorize?client_id='+@environment.getProperty('github.client.id')+'&redirect_uri='+@environment.getProperty('github.redirect.url')+'&scope=user&state=1'}"
+                               title="GITHUB登入"><img src="/image/loginImgs/github120c.png" style="height: 26px"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <!--导航条右空白-->
+            <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
+        </div>
+    </nav>
+</div>
+
+<div class="container-fluid" style="margin-left: 130px; margin-right: 130px; background: #ffffff;">
+    <div class="row">
+        <!--内容左部-->
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-9">
+            <h4><span th:text="${sectionName}"></span></h4>
+            <hr>
+            <!--我的草稿-->
+            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0px;">
+                <div class="jumbotron index-jumbotron" style="padding: 0px; margin-bottom: 0px; background: #ffffff;"
+                     th:each="articleDTO : ${profilePageDTO.data}">
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            <span class="label label-warning">文章</span>&ensp;
+                            <a th:href="@{'/publish/' + ${articleDTO.articleId}}" th:text="${articleDTO.title}"
+                               style="text-decoration: none; color: #000000;"></a>
+                        </h4>
+                        保存于<span th:text="${#dates.format(articleDTO.getGmtCreate(),'yyyy 年 MM 月 dd 日')}"></span>
+                        &ensp;<a th:href="@{'/publish/' + ${articleDTO.articleId}}" style="text-decoration: none; color: #00965e;"
+                                 th:if="${session.user != null && session.user.userId == articleDTO.creator}">编辑</a>
+                        <a class="index-publish" style="text-decoration: none; color: #00965e; cursor: pointer;"
+                           onclick="deleteArticle(this)" th:data-id="${articleDTO.articleId}">永久删除</a>
+                        <hr>
+                    </div>
+
+                </div>
+            </div>
+            <!--分页-->
+            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0px;">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li th:if="${profilePageDTO.showFirstPage}">
+                            <a th:href="@{'/profile/' + ${section}(page=${1})}" aria-label="Previous">
+                                <span aria-hidden="true">&lt;&lt;</span>
+                            </a>
+                        </li>
+                        <li th:if="${profilePageDTO.showPrevious}">
+                            <a th:href="@{'/profile/' + ${section}(page=${profilePageDTO.page - 1})}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&lt;</span>
+                            </a>
+                        </li>
+                        <li th:each="page : ${profilePageDTO.pages}"
+                            th:class="${profilePageDTO.page == page} ? 'active': ''">
+                            <a th:href="@{'/profile/' + ${section}(page=${page})}" th:text="${page}"></a>
+                        </li>
+                        <li th:if="${profilePageDTO.showNext}">
+                            <a th:href="@{'/profile/' + ${section}(page=${profilePageDTO.page + 1})}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&gt;</span>
+                            </a>
+                        </li>
+                        <li th:if="${profilePageDTO.showEndPage}">
+                            <a th:href="@{'/profile/' + ${section}(page=${profilePageDTO.totalPage})}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&gt;&gt;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-3">
+            <h2>草稿箱</h2>
+        </div>
+    </div>
+</div>
+</body>
+<!-- 全局js -->
+<script th:src="@{/common/js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/common/js/bootstrap.js}"></script>
+</html>

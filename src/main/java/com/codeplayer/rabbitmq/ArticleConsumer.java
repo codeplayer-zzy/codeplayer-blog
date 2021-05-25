@@ -1,12 +1,8 @@
 package com.codeplayer.rabbitmq;
 
-import com.codeplayer.controller.PublishArticleController;
-import com.codeplayer.dto.ArticleDTO;
 import com.codeplayer.elasticsearch.ArticleRepository;
 import com.codeplayer.entity.Article;
-import com.codeplayer.mapper.ArticleMapper;
 import com.codeplayer.service.ArticleService;
-import org.apache.commons.lang3.builder.ToStringExclude;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -41,7 +37,9 @@ public class ArticleConsumer {
     })
     public void saveArticle(String message){
         log.warn("【RabbitMq】保存文章的消息，ID：" + message);
-        Article article = articleService.findById(Long.parseLong(message));
+        Article article = articleService.findById(Long.valueOf(message));
+        article.setStatus(null);
+        article.setCreator(null);
         //创建ES索引数据
         articleRepository.save(article);
         log.warn("【RabbitMq】消费成功,创建ES索引数据");
@@ -61,7 +59,7 @@ public class ArticleConsumer {
     public void deleteArticle(String message){
         log.warn("【Rabbitmq】删除文章的消息，ID：" + message);
         //删除ES索引数据
-        articleRepository.deleteById((int) Long.parseLong(message));
+        articleRepository.deleteById(Long.valueOf((message)));
         log.warn("【RabbitMq】消费成功,删除ES索引数据");
     }
 }

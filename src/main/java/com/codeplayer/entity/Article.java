@@ -31,12 +31,12 @@ public class Article implements Serializable {
     /**
      * 文章标签
      */
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Text,analyzer = "ik_max_word")
     private String tag;
     /**
-     * 文章状态 0草稿 1发布 2回收站
+     * 文章状态 0草稿 1发布
      */
-    private int status;
+    private Integer status;
     /**
      * 文章创建者
      */
@@ -44,21 +44,26 @@ public class Article implements Serializable {
     /**
      * 文章评论数
      */
+    @Field(type = FieldType.Long)
     private Long commentCount;
     /**
      * 文章阅读数
      */
+    @Field(type = FieldType.Long)
     private Long viewCount;
     /**
      * 文章喜欢数
      */
+    @Field(type = FieldType.Long)
     private Long likeCount;
     /**
      * 文章创建时间
      */
+    @Field(type = FieldType.Date)
     private Date gmtCreate;
     /**
      * 文章修改时间
      */
+    @Field(type = FieldType.Date)
     private Date gmtModified;
 }

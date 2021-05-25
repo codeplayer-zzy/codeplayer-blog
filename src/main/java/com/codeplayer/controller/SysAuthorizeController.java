@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller
-public class AuthorizeController {
+public class SysAuthorizeController {
     @Value("${github.client.id}")
     private String githubClientId;
 
@@ -34,7 +34,7 @@ public class AuthorizeController {
     @Autowired
     private UserService userService;
 
-    private static final Logger log = LoggerFactory.getLogger(AuthorizeController.class);
+    private static final Logger log = LoggerFactory.getLogger(SysAuthorizeController.class);
 
     @GetMapping("/callback")
     public String callbackGithub(@RequestParam(name = "code") String code,

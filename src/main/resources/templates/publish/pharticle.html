@@ -4,8 +4,7 @@
     <meta charset="utf-8">
     <title>PublishArticle</title>
     <meta name="description" content="codeplayer-blog">
-    <!-- 360浏览器急速模式 -->
-    <meta name="renderer" content="webkit">
+
     <link rel="stylesheet" href="/common/css/bootstrap.css" th:href="@{/common/css/bootstrap.css}">
     <link rel="stylesheet" href="/front/style.css" th:href="@{/front/style.css}">
     <!-- 全局js -->
@@ -29,7 +28,10 @@
         </div>
         <div class="center-block btn-group btn-group-lg particle-p col-lg-4 col-xs-4 col-md-4 col-sm-4" role="group">写文章</div>
         <div class="btn-group particle-div col-lg-4 col-xs-4 col-md-4 col-sm-4" role="group">
-            <button type="submit" class="btn btn-success navbar-right" onclick="from()" id="particle-button">发布文章</button>
+            <button type="submit" class="btn btn-success navbar-right" style="border-radius: 5px;"
+                    onclick="from1()" id="particle-button">发布文章</button>
+            <button type="submit" class="btn btn-default navbar-right" style="margin-right: 10px; border: 1px solid #ccc; border-radius: 5px;"
+                    onclick="from2()" id="particle-button2">保存</button>
         </div>
     </div>
 </nav>
@@ -37,14 +39,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <form action="/particle" method="post" id="particle-form">
-                <input type="hidden" name="articleId" th:value="${articleId}">
+            <form id="particle-form">
+                <input type="hidden" id="articleId" th:value="${articleId}">
                 <div class="form-group">
                     <input type="text" class="form-control" id="title" name="title" th:value="${title}" autocomplete="off" placeholder="问题标题...">
                 </div>
-                <div class="form-group">
-                    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error != null}"></div>
-                </div>
+<!--                <div class="form-group">-->
+<!--                    <div class="alert alert-danger" role="alert" id="error1" th:text="${error}" th:if="${error != null}"></div>-->
+<!--                </div>-->
                 <div class="form-group">
 <!--                    <button type="button" class="btn btn-success"></button>-->
 <!--                    <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
@@ -106,18 +108,52 @@
     });
 
     //提交表单
-    $("#particle-button").click(function(){
-        $("#particle-form").submit();
-    });
+    function from1() {
+        let url = "/publishArticle";
+        form(url);
+    }
+
+    //保存表单
+    function from2() {
+        let url = "/saveArticle";
+        form(url);
+    }
+
+    function form(url) {
+        let title = $("#title").val();
+        let tag = $("#tag").val();
+        let content = $("#content").val();
+        let articleId = $("#articleId").val();
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            data: {title: title, tag: tag, content: content ,articleId: articleId},
+            success: function (result) {
+                if (result.code == 200) {
+                    location.replace("/index");
+                }else if (result.code == 201) {
+                    confirm(result.message);//message弹窗
+                    location.replace("/index");
+                }else if (result.code == 101) {
+                    window.open("/login");
+                    window.localStorage.setItem("closable", true);
+                }else {
+                    confirm(result.message);
+                }
+            }
+        });
+    }
+
 
     // 显示标签框
     function showSelectTag(e) {
-        let closeTag = e.getAttribute("closeTag");
-        if (closeTag){
+        let closeTag1 = e.getAttribute("closeTag1");
+        if (closeTag1){
             $("#select-tag").hide();
-            e.removeAttribute("closeTag");
+            e.removeAttribute("closeTag1");
         }else{
-            e.setAttribute("closeTag","in");
+            e.setAttribute("closeTag1","in");
             $("#select-tag").show();
         }
     }

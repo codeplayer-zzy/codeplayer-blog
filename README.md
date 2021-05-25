@@ -4,7 +4,8 @@
 开源论坛系统，现有功能：提问、回复、通知、GitHub登录、搜索、热门标签、kaptcha 验证码、Gitee 图床。功能持续更新中...
 
 ## 增加功能
-2021/5/21 ：增加查看文章的最新、最热、待回复功能。
+2021/5/21 ：增加了查看文章的最新、最热、待回复功能。  
+2021/5/25 ：增加了文章草稿箱功能，删除文章功能，还完善了搜素功能以及profile页面。
 
 ## 演示图片
 [![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489946035_cf4f81eddf3b453b997a10811d60409f.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489946035_cf4f81eddf3b453b997a10811d60409f.png)
@@ -12,7 +13,8 @@
 [![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490024016_935fea0eed57449fb90f7a0d007c719f.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490024016_935fea0eed57449fb90f7a0d007c719f.png)
 [![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-21/1621609840846_f5340d7fcde54e1499afdea5addedfcd.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-21/1621609840846_f5340d7fcde54e1499afdea5addedfcd.png)
 [![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490099345_b2f8c329ef1449449fc5b66c44f17e8e.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490099345_b2f8c329ef1449449fc5b66c44f17e8e.png)
-
+[![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-25/1621922007210_759d6e6e309c43558e36955932259813.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-25/1621922007210_759d6e6e309c43558e36955932259813.png)
+[![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-25/1621922076336_ba65d09909e84c3b836a200a8246460a.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-25/1621922076336_ba65d09909e84c3b836a200a8246460a.png)
 
 ## 使用技术
 | 后端技术 | 链接 |
@@ -32,6 +34,7 @@
 | ------------ | ------------ |
 |  BootStrap v3 |  https://v3.bootcss.com/  |
 |  jQuery |  https://jquery.com/download/  |
+|  moment.js |  https://momentjs.com/  |
 |  jQuery ajax |  https://www.jquery123.com/category/ajax/global-ajax-event-handlers/  |
 |  Gitee 图床 |  https://gitee.com/zhangzuyi/codeplayer-blog-table |
 
@@ -56,8 +59,8 @@ http://localhost:80
 学习 java 推荐看 b站 搜：码匠笔记
 
 ## 联系我
-作者非专业出身，目前大二，自学java，目前在简书发表了几篇文章，有兴趣的可以关注一波。简书搜：CodePr
-
+作者非专业出身，目前大二，自学java，目前在简书发表了几篇文章，有兴趣的可以关注一波。  
+简书搜：CodePr  
 有任何问题可以加我QQ2775152443，同样也欢迎一起交流学习。
 
 

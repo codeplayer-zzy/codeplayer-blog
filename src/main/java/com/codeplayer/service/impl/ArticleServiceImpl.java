@@ -4,7 +4,9 @@ import com.codeplayer.dto.ArticleDTO;
 import com.codeplayer.dto.ArticleQueryDTO;
 import com.codeplayer.dto.PageDTO;
 import com.codeplayer.entity.Article;
+import com.codeplayer.entity.Comment;
 import com.codeplayer.entity.User;
+import com.codeplayer.enums.ArticleStatusEnum;
 import com.codeplayer.enums.SortEnum;
 import com.codeplayer.service.ArticleService;
 import com.codeplayer.service.BaseService;
@@ -16,8 +18,6 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -39,20 +39,115 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
             BeanUtils.copyProperties(article,article1);
             //创建
             article1.setGmtCreate(new Date());
-            article1.setGmtModified(article.getGmtCreate());
-            article1.setStatus(1);
+            article1.setGmtModified(new Date());
+            article1.setStatus(ArticleStatusEnum.PUBLISHED.getStatus());
             article1.setLikeCount(0L);
             article1.setViewCount(0L);
             article1.setCommentCount(0L);
             //创建文章
             articleMapper.create(article1);
         }else {
+            article.setStatus(ArticleStatusEnum.PUBLISHED.getStatus());
             article.setGmtModified(new Date());
             //更新文章
             articleMapper.update(article);
         }
 
     }
+
+    /**
+     *  保存文章
+     * @param article
+     * @return
+     */
+    @Override
+    public Integer saveArticle(Article article) {
+        Integer aa = articleMapper.saveArticle(article);
+        return aa;
+    }
+
+
+
+    /**
+     *  回收，放进草稿箱。
+     * @param id
+     * @return
+     */
+    @Override
+    public Integer delArticleByArticleId(Long id) {
+        Integer aa = articleMapper.updateById(id, ArticleStatusEnum.DRAFT.getStatus());
+        return aa;
+    }
+
+    /**
+     *  永久删除
+     * @param id
+     * @return
+     */
+    @Override
+    public Integer deleteArticleByArticleId(Long id) {
+        Article article = articleMapper.findById(id);
+        Long articleId = article.getArticleId();
+        List<Comment> commentList = commentMapper.findByParentId(articleId);
+        commentList.forEach(comment -> {
+            Long commentId = comment.getCommentId();
+            commentMapper.deleteByParentId(commentId);//删除二级评论
+            commentMapper.deleteByCommentId(commentId);//删除一级评论
+        });
+        Integer aa = articleMapper.deleteArticleByArticleId(id,ArticleStatusEnum.DRAFT.getStatus());//删除文章
+        return aa;
+    }
+
+    /**
+     *  分页查找草稿箱文章 or 分页查找 ’我的文章‘
+     * @param userId
+     * @param page
+     * @param size
+     * @param status
+     * @return
+     */
+    @Override
+    public PageDTO<ArticleDTO> profileMultiPageList(Long userId, Integer page, Integer size, Integer status) {
+        ArticleQueryDTO articleQueryDTO = new ArticleQueryDTO();
+        if (status != null) {
+            articleQueryDTO.setStatus(status);
+        }
+        articleQueryDTO.setUserId(userId);
+        Integer totalPage;
+        Integer totalCount = articleMapper.countByArticleQueryDTO(articleQueryDTO);
+        if (totalCount % size == 0){
+            totalPage = totalCount / size;
+            if (totalPage == 0){
+                totalPage = 1;
+            }
+        } else {
+            totalPage = totalCount / size + 1;
+        }
+
+        if (page < 1) {
+            page = 1;
+        }
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        Integer offset = size * (page - 1);
+        articleQueryDTO.setOffset(offset);
+        articleQueryDTO.setSize(size);
+        List<Article> articleList = articleMapper.articlePageList(articleQueryDTO);
+        List<ArticleDTO> articleDTOList = new ArrayList<>();
+        PageDTO<ArticleDTO> pageDTO = new PageDTO<>();
+        for (Article article : articleList) {
+            User user = userMapper.findByCreatorId(article.getCreator());
+            ArticleDTO articleDTO = new ArticleDTO();
+            BeanUtils.copyProperties(article,articleDTO);
+            articleDTO.setUser(user);
+            articleDTOList.add(articleDTO);
+        }
+        pageDTO.setData(articleDTOList);
+        pageDTO.setPagination(totalPage, page);
+        return pageDTO;
+    }
+
     /**
      * @param page
      * @param size
@@ -80,10 +175,14 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         }
 
         Integer totalPage;
+        articleQueryDTO.setStatus(ArticleStatusEnum.PUBLISHED.getStatus());
         Integer totalCount = articleMapper.countByArticleQueryDTO(articleQueryDTO);
         if (totalCount % size == 0){
             totalPage = totalCount / size;
-        } else {
+            if (totalPage == 0){
+                totalPage = 1;
+            }
+        }else {
             totalPage = totalCount / size + 1;
         }
 
@@ -93,7 +192,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         if (page > totalPage) {
             page = totalPage;
         }
-        Integer offset = page < 1 ? 0 : size * (page - 1);
+        Integer offset = size * (page - 1);
         articleQueryDTO.setOffset(offset);
         articleQueryDTO.setSize(size);
         List<Article> articleList = articleMapper.articlePageList(articleQueryDTO);
@@ -108,47 +207,6 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         }
         pageDTO.setData(articleDTOList);
         pageDTO.setPagination(totalPage, page);
-        return pageDTO;
-    }
-    /**
-     * @param userId
-     * @param page
-     * @param size
-     * @return profileArticle分页查找
-     */
-    @Override
-    public PageDTO<ArticleDTO> profileArticlePageList(Long userId, Integer page, Integer size) {
-        PageDTO<ArticleDTO> pageDTO = new PageDTO<>();
-        Integer totalPage = null;
-        Integer totalCount = articleMapper.countByColumn(userId);
-        if (totalCount % size == 0){
-            totalPage = totalCount / size;
-            if (totalPage == 0){
-                totalPage = 1;
-            }
-        } else {
-            totalPage = totalCount / size + 1;
-        }
-
-        if (page < 1) {
-            page = 1;
-        }
-        if (page > totalPage) {
-            page = totalPage;
-        }
-        pageDTO.setPagination(totalPage, page);
-
-        Integer offset = size * (page - 1);
-        List<Article> articleList = articleMapper.profileArticlePageList(userId,offset, size);
-        List<ArticleDTO> articleDTOList = new ArrayList<>();
-        for (Article article : articleList) {
-            User user = userMapper.findByCreatorId(article.getCreator());
-            ArticleDTO articleDTO = new ArticleDTO();
-            BeanUtils.copyProperties(article,articleDTO);
-            articleDTO.setUser(user);
-            articleDTOList.add(articleDTO);
-        }
-        pageDTO.setData(articleDTOList);
         return pageDTO;
     }
 
@@ -172,7 +230,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
      * @return 查找文章内容 返回article
      */
     @Override
-    public Article findById(long parseLong) {
+    public Article findById(Long parseLong) {
         Article article = articleMapper.findById(parseLong);
         return article;
     }
@@ -180,10 +238,11 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
     /**
      *
      * @return 返回所有文章list
+     * @param status
      */
     @Override
-    public List<Article> findAllArticle() {
-        List<Article> articleList = articleMapper.findAll();
+    public List<Article> findByPublishStatus(Integer status) {
+        List<Article> articleList = articleMapper.findByPublishStatus(ArticleStatusEnum.PUBLISHED.getStatus());
         return articleList;
     }
 
@@ -249,9 +308,8 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         searchSourceBuilder.query(QueryBuilders.multiMatchQuery(content, "title", "content", "tag"))
                 .from(0)
                 .size((int) ArticleCount())
-                .sort("gmtCreate", SortOrder.valueOf("DESC"))
-                .highlighter(new HighlightBuilder().field("*").requireFieldMatch(false).preTags("<span style='color:red;font-weight:500'>").postTags("</span>"));
-
+                .sort("gmtCreate", SortOrder.valueOf("DESC"));
+//                .highlighter(new HighlightBuilder().field("*").requireFieldMatch(false).preTags("<span style='color:red;>").postTags("</span>"));
         searchRequest.source(searchSourceBuilder);
         //执行搜索
         SearchResponse response = null;
@@ -264,18 +322,26 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         for (SearchHit hit : hits) {
             Map<String, Object> sourceAsMap = hit.getSourceAsMap();
             Article article = new Article();
-            article.setArticleId(Long.valueOf((Integer) sourceAsMap.get("articleId")));
-            //设置title高亮
-            Map<String, HighlightField> highlightFields = hit.getHighlightFields();
-            if (highlightFields.containsKey("title")){
-                article.setTitle(highlightFields.get("title").fragments()[0].toString());
-            }
-            //设置tag高亮
-            if (highlightFields.containsKey("tag")){
-                article.setTitle(highlightFields.get("tag").fragments()[0].toString());
-            }
-            Article article1 = articleMapper.findById(article.getArticleId());
-            articleList.add(article1);
+            article.setArticleId(Long.valueOf((Integer)sourceAsMap.get("articleId")));
+            article.setTag(String.valueOf(sourceAsMap.get("tag")));
+            article.setTitle(String.valueOf(sourceAsMap.get("title")));
+            article.setContent(sourceAsMap.get("content"));
+            article.setCommentCount(Long.valueOf((Integer) sourceAsMap.get("commentCount")));
+            article.setLikeCount(Long.valueOf((Integer) sourceAsMap.get("likeCount")));
+            article.setViewCount(Long.valueOf((Integer) sourceAsMap.get("viewCount")));
+            article.setGmtCreate(new Date((Long) sourceAsMap.get("gmtCreate")));
+            article.setGmtModified(new Date((Long) sourceAsMap.get("gmtModified")));
+
+//            //设置title高亮
+//            Map<String, HighlightField> highlightFields = hit.getHighlightFields();
+//            if (highlightFields.containsKey("title")){
+//                article.setTitle(highlightFields.get("title").fragments()[0].toString());
+//            }
+//            //设置tag高亮
+//            if (highlightFields.containsKey("tag")){
+//                article.setTag(highlightFields.get("tag").fragments()[0].toString());
+//            }
+            articleList.add(article);
         }
         return articleList;
     }

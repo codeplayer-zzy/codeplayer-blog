@@ -2,6 +2,7 @@ package com.codeplayer.schedule;
 
 import com.codeplayer.cache.HotTagCache;
 import com.codeplayer.entity.Article;
+import com.codeplayer.enums.ArticleStatusEnum;
 import com.codeplayer.service.ArticleService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class HotTagTasks {
         log.info("hotTagSchedule start {}", new Date());
 
         Map<String, Long> priorities = new HashMap<>();//map是无序的
-        List<Article> allArticle = articleService.findAllArticle();
+        List<Article> allArticle = articleService.findByPublishStatus(ArticleStatusEnum.PUBLISHED.getStatus());
         allArticle.forEach(article -> {
             String[] tags = StringUtils.split(article.getTag(), ",");
             for (String tag : tags) {

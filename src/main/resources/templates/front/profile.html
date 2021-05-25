@@ -4,10 +4,7 @@
     <meta charset="utf-8">
     <title th:text="${sectionName}"></title>
     <meta name="description" content="CodePlayerBlog">
-    <!-- 360浏览器急速模式 -->
-    <meta name="renderer" content="webkit">
-    <!-- 避免IE使用兼容模式 -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <link rel="stylesheet" th:href="@{/common/css/bootstrap.css}">
     <link rel="stylesheet" href="/front/style.css" th:href="@{/front/style.css}">
 </head>
@@ -21,53 +18,55 @@
             <h2><span th:text="${sectionName}"></span></h2>
             <hr>
             <!--我的文章-->
-            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" th:if="${section == 'article'}">
-                <div class="jumbotron index-jumbotron" style="padding: 0px; margin-bottom: 0px; background: #ffffff;"
-                     th:each="articleDTO : ${profilePageDTO.data}">
-                    <div class="index-media-reply">
-                        <span th:text="${articleDTO.commentCount}"></span><br>
-                        <span>回答</span>
-                    </div>
-                    <div class="index-media-read" style="color: #999;">
-                        <span style="color: #999;" th:text="${articleDTO.viewCount}"></span><br>
-                        <span style="color: #999;">阅读</span>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">
-                            <a th:href="@{'/article/'+${articleDTO.articleId}}" th:text="${articleDTO.title}"
-                               style="text-decoration: none; color: #000000;"></a>
-                        </h4>
-                        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0px; margin-top: 5px;">
-                        <span class="label label-success" style="margin-right: 10px;"
-                              th:each="tag : ${articleDTO.tag.split(',')}">
-                            <span class="glyphicon glyphicon-tags"></span>
-                            <span class="label label-success" th:text="${tag}"></span>
-                        </span>
-                            <span class="glyphicon glyphicon-time" style="color: #999; float: right; margin-top: 8px;">
-                            <span class="index-publish"
-                                  th:text="${#dates.format(articleDTO.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
-                        </span>
-                        </div>
-                    </div>
-                    <hr class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <div class="jumbotron index-jumbotron" style="margin: 15px;padding: 0; background: #ffffff;"
+                 th:each="articleDTO : ${profilePageDTO.data}" th:if="${section == 'article'}">
+                <div class="index-media-reply">
+                    <span th:text="${articleDTO.commentCount}"></span><br>
+                    <span>回答</span>
                 </div>
+                <div class="index-media-read" style="color: #999;">
+                    <span style="color: #999;" th:text="${articleDTO.viewCount}"></span><br>
+                    <span style="color: #999;">阅读</span>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading" style="margin-top: 4px;margin-bottom: 1px;">
+                        <a th:href="@{'/article/'+${articleDTO.articleId}}" th:text="${articleDTO.title}"
+                           style="text-decoration: none;"></a>
+                        <span class="label label-warning" style="float: right;"
+                              th:if="${articleDTO.status == 2}">已回收</span>
+                        <span class="label label-success" style="float: right;"
+                              th:if="${articleDTO.status == 1}">已发布</span>
+                    </h4>
+                    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0px; margin-top: 5px;">
+                            <span class="label label-success" style="margin-right: 10px; white-space: normal;"
+                                  th:each="tag : ${articleDTO.tag.split(',')}">
+                                <span class="glyphicon glyphicon-tags"></span>
+                                <span class="label label-success" th:text="${tag}"></span>
+                            </span>
+                        <span class="glyphicon glyphicon-time" style="color: #999; float: right; margin-top: 8px;">
+                                <span class="index-publish"
+                                      th:text="${#dates.format(articleDTO.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
+                            </span>
+                    </div>
+                </div>
+                <hr>
             </div>
+
             <!--最新通知-->
-            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" th:if="${section == 'replies'}">
-                <div class="jumbotron index-jumbotron" style="padding: 0px; margin-bottom: 0px; background: #ffffff;"
-                     th:each="notificationDTO : ${profilePageDTO.data}">
-                    <div class="media-body">
-                        <p class="media-heading">
-                            <span th:text="${notificationDTO.notifierName + ' ' + notificationDTO.getTypeName() + ' '}"></span>
-                            <a th:href="@{'/notification/'+${notificationDTO.notificationId}}"
-                               th:text="${notificationDTO.outerTitle}"
-                               style="text-decoration: none;"></a>
-                            <span class="label label-success" th:if="${notificationDTO.status == 0}">未读</span>
-                        </p>
-                    </div>
-                    <hr class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <div class="jumbotron index-jumbotron" style="padding: 0px; margin-bottom: 0px; background: #ffffff;"
+                 th:each="notificationDTO : ${profilePageDTO.data}" th:if="${section == 'replies'}">
+                <div class="media-body">
+                    <p class="media-heading">
+                        <span th:text="${notificationDTO.notifierName + ' ' + notificationDTO.getTypeName() + ' '}"></span>
+                        <a th:href="@{'/notification/'+${notificationDTO.notificationId}}"
+                           th:text="${notificationDTO.outerTitle}"
+                           style="text-decoration: none;"></a>
+                        <span class="label label-success" th:if="${notificationDTO.status == 0}">未读</span>
+                    </p>
                 </div>
+                <hr>
             </div>
+
             <!--分页-->
             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                 <nav aria-label="Page navigation">
@@ -106,8 +105,11 @@
 
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-3">
             <div class="list-group" style="margin-top: 15px;">
-                <a th:href="@{/profile/article}" th:class="${section == 'article'} ? 'active list-group-item' : 'list-group-item'"><span class="badge"></span>我的文章</a>
-                <a th:href="@{/profile/replies}" th:class="${section == 'replies'} ? 'active list-group-item' : 'list-group-item'">
+                <a th:href="@{/profile/article}"
+                   th:class="${section == 'article'} ? 'active list-group-item' : 'list-group-item'"><span
+                        class="badge"></span>我的文章</a>
+                <a th:href="@{/profile/replies}"
+                   th:class="${section == 'replies'} ? 'active list-group-item' : 'list-group-item'">
                     最新回复
                     <span class="badge" th:text="${session.unreadCount}"></span>
                 </a>

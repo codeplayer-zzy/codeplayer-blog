@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.transform.Result;
+import javax.websocket.server.PathParam;
 import java.util.Date;
 import java.util.List;
 
@@ -57,13 +57,30 @@ public class SysCommentController {
     }
 
     /**
-     *
      * 查找回复
+     * @param id
+     * @return
      */
     @ResponseBody
     @GetMapping("/comment/{id}")
     public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id") Long id) {
         List<CommentDTO> commentDTOS = commentService.listByTargetId(id, CommentTypeEnum.COMMENT);
         return ResultDTO.okOf(commentDTOS);
+    }
+
+    /**
+     * 删除评论
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @DeleteMapping("/delComment")
+    public ResultDTO delComments(@RequestParam(value = "id") Long id) {
+        Integer aa = commentService.delCommentsByCommentId(id);
+        if (aa == 0) {
+            return ResultDTO.errorOf(100,"服务冒烟了，要不然你稍后再试试！！");
+        }else {
+            return ResultDTO.okOf(200,"恭喜您，删除成功了！！");
+        }
     }
 }

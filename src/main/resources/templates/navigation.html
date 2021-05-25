@@ -19,7 +19,7 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <form class="navbar-form navbar-left" action="/search">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="content" placeholder="搜索问题 ">
+                            <input type="text" class="form-control" name="content" autocomplete="off" placeholder="搜索问题 ">
                         </div>
                         <button type="submit" class="btn btn-default" th:href="@{/search}">搜索</button>
                     </form>
@@ -33,7 +33,7 @@
                                 <li><a th:href="@{/particle}">写文章</a></li>
                                 <li><a href="#">记笔记</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#">草搞</a></li>
+                                <li><a th:href="@{/profile/draft}">草搞箱</a></li>
                             </ul>
                         </li>
                         <li><a th:href="@{/profile/replies}">通知<span class="badge index-messages" th:text="${session.unreadCount}"></span></a></li>

@@ -16,7 +16,7 @@ public class ArticleDTO implements Serializable{
     private String title;
     private Object content;
     private String tag;
-    private int status;
+    private Integer status;
     private Long creator;
     private Long commentCount;
     private Long viewCount;

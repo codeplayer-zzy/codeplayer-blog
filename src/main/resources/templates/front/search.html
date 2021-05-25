@@ -4,8 +4,7 @@
     <meta charset="utf-8">
     <title>CodePlayer-Blog</title>
     <meta name="description" content="CodePlayerBlog">
-    <!-- 360浏览器急速模式 -->
-    <meta name="renderer" content="webkit">
+
     <link rel="stylesheet" th:href="@{/common/css/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/front/style.css}">
     <!-- 全局js -->
@@ -21,35 +20,51 @@
         <!--内容左部-->
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-9">
             <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>&nbsp;搜索结果</h2>
-            <hr class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-            <div class="jumbotron index-jumbotron" style="padding: 0px; margin-bottom: 0px; background: #ffffff;" th:each="articleList: ${articleList}">
+            <hr>
+            <div class="jumbotron index-jumbotron" style="margin: 15px;padding: 0; background: #ffffff;"
+                 th:each="articleDTO : ${articleList}">
                 <div class="index-media-reply">
-                    <span th:text="${articleList.commentCount}"></span><br>
+                    <span th:text="${articleDTO.commentCount}"></span><br>
                     <span>回答</span>
                 </div>
                 <div class="index-media-read" style="color: #999;">
-                    <span style="color: #999;" th:text="${articleList.viewCount}"></span><br>
+                    <span style="color: #999;" th:text="${articleDTO.viewCount}"></span><br>
                     <span style="color: #999;">阅读</span>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading">
-                        <a th:href="@{'/article/'+${articleList.articleId}}" th:text="${articleList.title}" style="text-decoration: none;"></a>
+                    <h4 class="media-heading" style="margin-top: 4px;margin-bottom: 1px;">
+                        <a th:href="@{'/article/'+${articleDTO.articleId}}" th:utext="${articleDTO.title}"
+                           style="text-decoration: none;"></a>
                     </h4>
                     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0px; margin-top: 5px;">
-                        <span class="label label-success" style="margin-right: 10px;" th:each="tag : ${articleList.tag.split(',')}">
-                            <span class="glyphicon glyphicon-tags"></span>
-                            <span class="label label-success" th:text="${tag}"></span>
-                        </span>
+                            <span class="label label-success" style="margin-right: 10px; white-space: normal;"
+                                  th:each="tag : ${articleDTO.tag.split(',')}">
+                                <span class="glyphicon glyphicon-tags"></span>
+                                <span class="label label-success" th:utext="${tag}"></span>
+                            </span>
                         <span class="glyphicon glyphicon-time" style="color: #999; float: right; margin-top: 8px;">
-                            <span class="index-publish" th:text="${#dates.format(articleList.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
-                        </span>
+                                <span class="index-publish"
+                                      th:text="${#dates.format(articleDTO.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
+                            </span>
                     </div>
                 </div>
-                <hr class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+                <hr>
             </div>
         </div>
         <!--内容右部-->
-        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-3">热门文章</div>
+<!--        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-3" style="padding: 0;">-->
+<!--            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0;">-->
+<!--                <h2 class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="margin-bottom: 2px;">热门标签</h2>-->
+<!--            </div>-->
+<!--            <hr class="col-md-12 col-xs-12 col-sm-12 col-lg-12">-->
+<!--            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0 15px;">-->
+<!--                <div class="label label-primary" style="margin-right: 10px;line-height: 30px; white-space: normal;"-->
+<!--                     th:each="tag : ${hotTags}">-->
+<!--                    <a class="label label-primary" th:text="${tag}" th:href="@{/index(tag=${tag})}"></a>-->
+<!--                </div>-->
+
+<!--            </div>-->
+<!--        </div>-->
     </div>
 </div>
 </body>

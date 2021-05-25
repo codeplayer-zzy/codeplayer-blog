@@ -1,6 +1,5 @@
 package com.codeplayer.service.impl;
 
-import com.alibaba.druid.sql.dialect.oracle.ast.clause.OracleReturningClause;
 import com.codeplayer.dto.CommentDTO;
 import com.codeplayer.entity.Article;
 import com.codeplayer.entity.Comment;
@@ -33,7 +32,7 @@ public class CommentServiceImpl extends BaseService implements CommentService {
         }
         if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
             //回复评论
-            Comment dbcomment = commentMapper.findById(comment.getParentId());
+            Comment dbcomment = commentMapper.findByCommentId(comment.getParentId());
             if (dbcomment == null){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
@@ -106,5 +105,14 @@ public class CommentServiceImpl extends BaseService implements CommentService {
             return commentDTO;
         }).collect(Collectors.toList());
         return commentDTOList;
+    }
+
+    @Override
+    public Integer delCommentsByCommentId(Long id) {
+        Comment comment = commentMapper.findByCommentId(id);
+        Long commentId = comment.getCommentId();
+        commentMapper.deleteByParentId(commentId);//删除二级评论
+        Integer aa = commentMapper.deleteByCommentId(id);//删除一级评论
+        return aa;//成功与否
     }
 }

@@ -57,7 +57,7 @@ public class UserServiceImpl extends BaseService implements UserService {
         if (githubUsers.size() == 0) {
             // 插入
             user.setGmtCreate(new Date());
-            user.setGmtModified(user.getGmtCreate());
+            user.setGmtModified(new Date());
             userMapper.insert(user);
         }else {
             //更新

@@ -14,8 +14,6 @@ public interface ArticleService {
 
     PageDTO<ArticleDTO> articlePageList(Integer page, Integer size, String tag, String sort);
 
-    PageDTO<ArticleDTO> profileArticlePageList(Long userId, Integer page, Integer size);
-
     ArticleDTO getById(Long id);
 
     void incView(Long id);
@@ -26,7 +24,16 @@ public interface ArticleService {
 
     long ArticleCount();
 
-    Article findById(long parseLong);
+    Article findById(Long parseLong);
 
-    List<Article> findAllArticle();
+    List<Article> findByPublishStatus(Integer status);
+
+    Integer delArticleByArticleId(Long id);
+
+    PageDTO<ArticleDTO> profileMultiPageList(Long userId, Integer page, Integer size, Integer status);
+
+    Integer deleteArticleByArticleId(Long id);
+
+    Integer saveArticle(Article article);
+
 }

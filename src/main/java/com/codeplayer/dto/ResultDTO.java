@@ -36,6 +36,12 @@ public class ResultDTO<T> implements Serializable{
         resultDTO.setMessage(message);
         return resultDTO;
     }
+    public static ResultDTO okOf(Integer code, String message) {
+        ResultDTO resultDTO = new ResultDTO();
+        resultDTO.setCode(code);
+        resultDTO.setMessage(message);
+        return resultDTO;
+    }
 
     public static ResultDTO errorOf(CustomizeErrorCode errorCode) {
         return errorOf(errorCode.getCode(),errorCode.getMessage());
@@ -52,4 +58,5 @@ public class ResultDTO<T> implements Serializable{
         resultDTO.setData(t);
         return resultDTO;
     }
+
 }

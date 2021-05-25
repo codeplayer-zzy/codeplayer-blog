@@ -14,4 +14,7 @@ public interface CommentService {
     void insert(Comment comment, User user);
 
     List<CommentDTO> listByTargetId(Long id, CommentTypeEnum commentTypeEnum);
+
+    Integer delCommentsByCommentId(Long id);
+
 }

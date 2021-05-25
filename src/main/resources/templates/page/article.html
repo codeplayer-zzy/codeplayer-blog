@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <title>CodePlayer-Blog</title>
     <meta name="description" content="CodePlayerBlog">
-    <!-- 360浏览器急速模式 -->
-    <meta name="renderer" content="webkit">
 
     <link rel="stylesheet" href="/common/css/bootstrap.css" th:href="@{/common/css/bootstrap.css}">
     <link rel="stylesheet" href="/front/style.css" th:href="@{/front/style.css}">
@@ -40,14 +38,16 @@
                          th:src="${articleDTO.user.avatarUrl}">
                 </a>
                 <span style="color: #999;">
-                <strong><span style="color: #00965e;" th:text="${articleDTO.user.name}"></span></strong>
-                &ensp;&ensp;发布于：<span class="glyphicon glyphicon-dashboard" style="color: #999;"
+                    <strong><span style="color: #00965e;" th:text="${articleDTO.user.name}"></span></strong>
+                    &ensp;&ensp;发布于：<span class="glyphicon glyphicon-dashboard" style="color: #999;"
                                       th:text="${#dates.format(articleDTO.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
-                &ensp;&#124;&ensp;阅读&ensp;<span style="color: #999;" th:text="${articleDTO.viewCount}"></span>
-                <span style="color: #999;" aria-hidden="true">&squf;</span>
-                回答&ensp;<span style="color: #999;" th:text="${articleDTO.commentCount}"></span>
-                &ensp;<a th:href="@{'/publish/' + ${articleDTO.articleId}}" style="text-decoration: none; color: #00965e;"
+                    &ensp;&#124;&ensp;阅读&ensp;<span style="color: #999;" th:text="${articleDTO.viewCount}"></span>
+                    <span style="color: #999;" aria-hidden="true">&squf;</span>
+                    回答&ensp;<span style="color: #999;" th:text="${articleDTO.commentCount}"></span>
+                    &ensp;<a th:href="@{'/publish/' + ${articleDTO.articleId}}" style="text-decoration: none; color: #00965e;"
                          th:if="${session.user != null && session.user.userId == articleDTO.creator}">编辑文章</a>
+                    &ensp;<a th:if="${session.user != null && session.user.userId == articleDTO.creator}" style="text-decoration: none;color: #00965e;cursor: pointer;"
+                             onclick="delArticle(this)" th:data-id="${articleDTO.articleId}">删除文章</a>
                 </span>
                 <div class="article-content">
                     <div id="markdown-view" style="padding: 0;">
@@ -108,14 +108,16 @@
                         </div>
                         <div class="media-body">
                             <h5 class="media-heading">
-                                <span th:text="${commentDTO.user.name}" style="color: #00965e;"></span>
+                                <strong><span th:text="${commentDTO.user.name}" style="color: #00965e;"></span></strong>
+                                <span><a th:if="${session.user != null && session.user.userId == commentDTO.commentator}" style="text-decoration: none; float: right;"
+                                         onclick="delComment(this)" th:data-id="${commentDTO.commentId}"><span style="color: #00965e;cursor: pointer;">删除评论</span></a></span>
                             </h5>
                             <div th:text="${commentDTO.content}" style="margin-top: 10px;"></div>
                             <div class="menu" style="margin-top: 10px; color: #999">
                                 <span class="glyphicon glyphicon-thumbs-up icon"></span>
                                 <span th:data-id="${commentDTO.commentId}" onclick="collapseComments(this)">
-                                <span class="glyphicon glyphicon-comment icon"></span>
-                                <span th:text="${commentDTO.commentCount}"></span>
+                                    <span class="glyphicon glyphicon-comment icon"></span>
+                                    <span th:text="${commentDTO.commentCount}"></span>
                                 </span>
                                 <span class="pull-right glyphicon glyphicon-dashboard"
                                       th:text="${#dates.format(articleDTO.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>

@@ -4,6 +4,7 @@ import com.codeplayer.dto.ArticleDTO;
 import com.codeplayer.dto.NotificationDTO;
 import com.codeplayer.dto.PageDTO;
 import com.codeplayer.entity.User;
+import com.codeplayer.enums.ArticleStatusEnum;
 import com.codeplayer.service.ArticleService;
 import com.codeplayer.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,26 +26,34 @@ public class SysProfileController {
     //profile页面跳转
     @GetMapping("/profile/{active}")
     public String profile(@PathVariable(name = "active")String active,
-                          @RequestParam(name = "page", defaultValue = "1") Integer page,
-                          @RequestParam(name = "size", defaultValue = "3") Integer size,
+                          @RequestParam(name = "page", defaultValue = "0") Integer page,
+                          @RequestParam(name = "size", defaultValue = "5") Integer size,
                           HttpServletRequest request,
                           Model model){
         User user = (User) request.getSession().getAttribute("user");
         if (user == null){
-            return "redirect:/";
+            return "redirect:/login";
         }
 
         if ("article".equals(active)){
+            PageDTO<ArticleDTO> profileArticlePageDTO = articleService.profileMultiPageList(user.getUserId(), page, size,null);
+            model.addAttribute("profilePageDTO",profileArticlePageDTO);
             model.addAttribute("section","article");
             model.addAttribute("sectionName","我的文章");
-            PageDTO<ArticleDTO> profileArticlePageDTO = articleService.profileArticlePageList(user.getUserId(), page, size);
-            model.addAttribute("profilePageDTO",profileArticlePageDTO);
+            return "front/profile";
         }else if("replies".equals(active)) {
             PageDTO<NotificationDTO> profileRepliesPageDTO = notificationService.profileRepliesPageList(user.getUserId(), page, size);
             model.addAttribute("profilePageDTO", profileRepliesPageDTO);
             model.addAttribute("section", "replies");
             model.addAttribute("sectionName", "我的回复");
+            return "front/profile";
+        }else if ("draft".equals(active)) {
+            PageDTO<ArticleDTO> profileDraftPageDTO = articleService.profileMultiPageList(user.getUserId(), page, size, ArticleStatusEnum.DRAFT.getStatus());
+            model.addAttribute("profilePageDTO", profileDraftPageDTO);
+            model.addAttribute("section","draft");
+            model.addAttribute("sectionName","我的草稿");
+            return "front/draft";
         }
-        return "front/profile";
+        return null;
     }
 }

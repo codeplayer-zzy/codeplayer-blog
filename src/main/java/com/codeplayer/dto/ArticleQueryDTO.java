@@ -10,4 +10,6 @@ public class ArticleQueryDTO {
     private String sort;
     private Integer offset;
     private Long time;
+    private Long userId;
+    private Integer status;
 }

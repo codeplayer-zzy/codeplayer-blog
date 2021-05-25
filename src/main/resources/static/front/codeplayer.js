@@ -1,4 +1,76 @@
 /**
+ * 删除评论
+ */
+function delComment(e) {
+    let b = confirm('确认删除该回复么？删除后无法恢复！');
+    if (b){
+        let id = e.getAttribute('data-id');
+        $.ajax({
+            type: "DELETE",
+            url: "/delComment",
+            dataType: "json",
+            data: {id: id},
+            success: function (result) {
+                if (result.code == 200) {
+                    confirm(result.message);//message弹窗
+                    window.location.reload();
+                } else {
+                    confirm(result.message);
+                }
+            }
+        });
+    }
+}
+
+/**
+ * 轻删除
+ */
+function delArticle(e) {
+    let b = confirm('确认轻删除该文章么？删除后将回收到草稿箱中哦！');
+    if (b) {
+        let id = e.getAttribute('data-id');
+        $.ajax({
+            type: "DELETE",
+            url: "/delArticle",
+            dataType: "json",
+            data: {id: id},
+            success: function (result) {
+                if (result.code == 200) {
+                    confirm(result.message);
+                    window.open("/index");
+                }else {
+                    confirm(result.message);
+                }
+            }
+        });
+    }
+}
+
+/**
+ * 永久删除文章
+ */
+function deleteArticle(e) {
+    let b = confirm('确认永久删除该文章么？删除后无法恢复！');
+    if (b){
+        let id = e.getAttribute('data-id');
+        $.ajax({
+            type: "DELETE",
+            url: "/deleteArticle",
+            dataType: "json",
+            data: {id: id},
+            success: function (result) {
+                if (result.code == 200) {
+                    confirm(result.message);//message弹窗
+                    window.location.reload();
+                } else {
+                    confirm(result.message);
+                }
+            }
+        });
+    }
+}
+
+/**
  * 添加一级评论
  */
 function post() {
