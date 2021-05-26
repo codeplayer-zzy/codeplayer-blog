@@ -3,9 +3,7 @@ package com.codeplayer.mapper;
 import com.codeplayer.dto.ArticleQueryDTO;
 import com.codeplayer.entity.Article;
 import org.apache.ibatis.annotations.*;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
-import java.util.Date;
 import java.util.List;
 /**
  * @description: (article)表数据库访问层
@@ -61,7 +59,10 @@ public interface ArticleMapper {
     Article findById(@Param(value = "articleId") Long articleId);
 
     @Select("SELECT * FROM article WHERE status = #{status}")
-    List<Article> findByPublishStatus(@Param(value = "status") Integer status);
+    List<Article> findByArticleStatus(@Param(value = "status") Integer status);
+
+    @Select("SELECT * FROM article WHERE creator = #{userId} AND status = #{status}")
+    List<Article> findByCreatorAndArticleStatus(@Param(value = "userId") Long userId, @Param(value = "status") Integer status);
 
     @Select("SELECT * FROM article WHERE article_id != #{articleId} AND tag regexp #{tag}")
     List<Article> selectRelated(Article article);

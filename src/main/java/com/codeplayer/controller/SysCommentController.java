@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class SysCommentController {
      *
      * @param commentResultDTO
      * @param request
-     * 创建回复
+     * 创建评论
      */
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
@@ -57,7 +56,7 @@ public class SysCommentController {
     }
 
     /**
-     * 查找回复
+     * 查找二级评论
      * @param id
      * @return
      */
@@ -81,6 +80,53 @@ public class SysCommentController {
             return ResultDTO.errorOf(100,"服务冒烟了，要不然你稍后再试试！！");
         }else {
             return ResultDTO.okOf(200,"恭喜您，删除成功了！！");
+        }
+    }
+
+    /**
+     *  点赞评论
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/likeComment")
+    public ResultDTO likeComments(@RequestParam(value = "id") Long id,
+                                  HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
+        }
+        Integer aa = commentService.likeCommentsByCommentId(id);
+        if (aa == 0) {
+            return ResultDTO.errorOf(100,"服务冒烟了，要不然你稍后再试试！！");
+        }else {
+            ResultDTO resultDTO = new ResultDTO();
+            resultDTO.setCode(200);
+            resultDTO.setMessage("恭喜您，点赞成功了！！");
+            return resultDTO;
+        }
+    }
+    /**
+     *  取消点赞评论
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/unLikeComment")
+    public ResultDTO cancelLikeComments(@RequestParam(value = "id") Long id,
+                                  HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
+        }
+        Integer aa = commentService.cancelLikeCommentByCommentId(id);
+        if (aa == 0) {
+            return ResultDTO.errorOf(100,"服务冒烟了，要不然你稍后再试试！！");
+        }else {
+            ResultDTO resultDTO = new ResultDTO();
+            resultDTO.setCode(200);
+            resultDTO.setMessage("恭喜您，取消成功了！！");
+            return resultDTO;
         }
     }
 }

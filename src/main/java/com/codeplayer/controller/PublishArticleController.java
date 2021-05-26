@@ -6,6 +6,7 @@ import com.codeplayer.dto.ResultDTO;
 import com.codeplayer.entity.Article;
 import com.codeplayer.entity.User;
 import com.codeplayer.enums.ArticleStatusEnum;
+import com.codeplayer.exception.CustomizeErrorCode;
 import com.codeplayer.service.ArticleService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -31,6 +32,8 @@ public class PublishArticleController {
     private ArticleService articleService;
     @Autowired
     private RabbitTemplate rabbitTemplate;
+//    @Autowired
+//    private ArticleRepository articleRepository;
 
     private static final Logger log = LoggerFactory.getLogger(PublishArticleController.class);
 
@@ -112,15 +115,27 @@ public class PublishArticleController {
         if (articleId == null) {
             //消费生产者
             //发布新的文章，找到当前文章id
-            List<Article> articleList = articleService.findByPublishStatus(ArticleStatusEnum.PUBLISHED.getStatus());
+            List<Article> articleList = articleService.findByUserIdAndPublishStatus(user.getUserId(),ArticleStatusEnum.PUBLISHED.getStatus());
             Optional<Article> article1 = articleList.stream().findFirst();
             Long articleId1 = article1.get().getArticleId();
             rabbitTemplate.convertAndSend("es", "article.save", articleId1);
+//            Article article2 = articleService.findById(articleId1);
+//            article2.setStatus(null);
+//            article2.setCreator(null);
+//            //创建ES索引数据
+//            articleRepository.save(article);
+//            log.warn("【Elasticsearch】成功,创建ES索引数据");
             return ResultDTO.okOf(200,"发布文章成功！！");
         }
         //消费生产者
         //发布更新的文章
         rabbitTemplate.convertAndSend("es", "article.save", articleId);
+//        Article article2 = articleService.findById(articleId);
+//        article2.setStatus(null);
+//        article2.setCreator(null);
+//        //创建ES索引数据
+//        articleRepository.save(article);
+//        log.warn("【Elasticsearch】成功,创建ES索引数据");
         return ResultDTO.okOf(200, "更新文章成功！！");
     }
 
@@ -153,14 +168,6 @@ public class PublishArticleController {
             model.addAttribute("error","标题不能为空");
             return ResultDTO.errorOf(100,"标题不能为空");
         }
-        if (tag == null || tag == ""){
-            model.addAttribute("error","标签不能为空");
-            return ResultDTO.errorOf(100,"标签不能为空");
-        }
-        if (content == null || content == ""){
-            model.addAttribute("error","问题补充不足");
-            return ResultDTO.errorOf(100,"问题补充不足");
-        }
 
         String invalid = TagCache.filterInvalid(tag);
         if(StringUtils.isNotBlank(invalid)){
@@ -184,6 +191,25 @@ public class PublishArticleController {
             return ResultDTO.errorOf(100, "服务冒烟了，要不然你稍后再试试！！");
         }else {
             return ResultDTO.okOf(201,"恭喜您，已保存到草稿箱里！！");
+        }
+    }
+
+    /**
+     *  草稿箱文章一键全部发布
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/allPublish")
+    public ResultDTO articleAllPublish(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
+        }
+        Integer aa = articleService.articleAllPublish(user.getUserId(),ArticleStatusEnum.DRAFT.getStatus());
+        if (aa == 0) {
+            return ResultDTO.errorOf(100, "服务冒烟了，要不然你稍后再试试！！");
+        }else {
+            return ResultDTO.okOf(200,"恭喜您，文章全部发布啦！！");
         }
     }
 }

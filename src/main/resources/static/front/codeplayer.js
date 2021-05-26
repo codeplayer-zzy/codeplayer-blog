@@ -71,6 +71,27 @@ function deleteArticle(e) {
 }
 
 /**
+ * 文章一键全部发布
+ */
+function allPublish(e) {
+    let b = confirm('点击确定将发布所以文章哦，是！请按确定！！');
+    if (b) {
+        $.ajax({
+            type: "GET",
+            url: "/allPublish",
+            dataType: "json",
+            success: function (result) {
+                if (result.code == 200) {
+                    window.location.reload();
+                } else {
+                    confirm(result.message);
+                }
+            }
+        });
+    }
+}
+
+/**
  * 添加一级评论
  */
 function post() {
@@ -100,7 +121,7 @@ function commentAjaxMethod(targetId, type, content) {
                 if (response.code === 2003){
                     let isAccepted = confirm(response.message);//message弹窗
                     if (isAccepted){
-                        window.open("/login");
+                        window.open("/login").then(window.location.reload());
                         window.localStorage.setItem("closable", true);
                     }
                 }else {
@@ -158,18 +179,20 @@ function collapseComments(e) {
                     }).append($("<h5/>",{
                         "class": "media-heading comment-name",
                         "html": comment.user.name
-                    })).append($("<div/>",{
+                    }).append($("<div/>",{
                         "class": "comment-content",
                         "html": comment.content
-                    })).append($("<span/>",{
+                    }).append($("<span/>",{
                         "class": "pull-right glyphicon glyphicon-dashboard comment-gmtCreate",
                         "html": moment(comment.gmtCreate).format('YYYY-MM-DD HH:MM')
-                    }));
+                    }))));
+
 
                     let mediaElement = $("<div/>",{
                         "class": "media"
                     }).append(mediaLeftElement)
                         .append(mediaBodyElement);
+
 
                     let commentElement = $("<div/>", {
                         "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12"
@@ -183,5 +206,61 @@ function collapseComments(e) {
                 e.classList.add("active");
             });
         }
+    }
+}
+
+/**
+ * 评论点赞
+ */
+function likeComments(e) {
+    let id = e.getAttribute("data-id");
+    let clickLikeCount = e.getAttribute("clickLikeCount");
+
+    if (!clickLikeCount) {
+        $.ajax({
+            type: "GET",
+            url: "/likeComment",
+            dataType: "json",
+            data: {id: id},
+            success: function (result) {
+                if (result.code == 200) {
+                    e.setAttribute("clickLikeCount","on");
+                    e.classList.add("active");
+                    let likeCount = $("#likeCount-" + id);
+                    likeCount.html(parseInt(likeCount.text())+1);//点赞数加一
+                }else if (result.code == 100) {
+                    confirm(result.message);
+                } else {
+                    let b = confirm(result.message);
+                    if (b) {
+                        window.open("/login");
+                        window.localStorage.setItem("closable", true);
+                    }
+                }
+            }
+        });
+    }else {
+        $.ajax({
+            type: "GET",
+            url: "/unLikeComment",
+            dataType: "json",
+            data: {id: id},
+            success: function (result) {
+                if (result.code == 200) {
+                    e.removeAttribute("clickLikeCount");
+                    e.classList.remove("active");
+                    let likeCount = $("#likeCount-" + id);
+                    likeCount.html(parseInt(likeCount.text())-1);//点赞数加一
+                }else if (result.code == 100) {
+                    confirm(result.message);
+                } else {
+                    let b = confirm(result.message);
+                    if (b) {
+                        window.open("/login");
+                        window.localStorage.setItem("closable", true);
+                    }
+                }
+            }
+        });
     }
 }

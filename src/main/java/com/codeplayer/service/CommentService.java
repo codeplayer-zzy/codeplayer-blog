@@ -17,4 +17,8 @@ public interface CommentService {
 
     Integer delCommentsByCommentId(Long id);
 
+    Integer likeCommentsByCommentId(Long id);
+
+    Integer cancelLikeCommentByCommentId(Long id);
+
 }

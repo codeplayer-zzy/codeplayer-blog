@@ -99,6 +99,7 @@ body{
 }
 .comment-content{
     margin-top: 10px;
+    color: #000000;
 }
 .comment-gmtCreate{
     color: #999;

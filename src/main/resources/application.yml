@@ -42,8 +42,8 @@ logging:
     name: logs/codeplayer-blog.log
   logback:
     rollingpolicy:
-      total-size-cap: 200MB
-      max-history: 30
+      total-size-cap: 10MB
+      max-history: 3
 
 mybatis:
   configuration:

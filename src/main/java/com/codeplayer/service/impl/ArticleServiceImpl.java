@@ -66,6 +66,37 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         return aa;
     }
 
+    /**
+     *  草稿箱文章一键全部发布
+     * @return
+     * @param userId
+     * @param status
+     */
+    @Override
+    public Integer articleAllPublish(Long userId, Integer status) {
+        List<Article> articleList1 = articleMapper.findByCreatorAndArticleStatus(userId, status);
+        articleList1.forEach(article1 -> {
+            article1.setStatus(ArticleStatusEnum.PUBLISHED.getStatus());
+            articleMapper.updateById(article1.getArticleId(),article1.getStatus());
+        });
+        if (articleList1.size() == 0) {
+            return 0;
+        }
+        return 1;
+    }
+
+
+    /**
+     *  返回user的所有发布的文章
+     * @param userId
+     * @param status
+     * @return
+     */
+    @Override
+    public List<Article> findByUserIdAndPublishStatus(Long userId, Integer status) {
+        List<Article> articleList = articleMapper.findByCreatorAndArticleStatus(userId, status);
+        return articleList;
+    }
 
 
     /**
@@ -242,7 +273,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
      */
     @Override
     public List<Article> findByPublishStatus(Integer status) {
-        List<Article> articleList = articleMapper.findByPublishStatus(ArticleStatusEnum.PUBLISHED.getStatus());
+        List<Article> articleList = articleMapper.findByArticleStatus(ArticleStatusEnum.PUBLISHED.getStatus());
         return articleList;
     }
 

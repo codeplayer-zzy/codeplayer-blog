@@ -26,7 +26,7 @@ public interface CommentMapper {
     void incArticleCommentCount(Article article);
 
     @Update("UPDATE comment SET comment_count = #{commentCount} WHERE comment_id = #{commentId}")
-    void incCommentCount(Comment commentCount);
+    void incCommentCommentCount(Comment comment);
 
     @Select("SELECT * FROM comment WHERE parent_id = #{parentId} AND type = #{type} ORDER BY gmt_create DESC")
     List<Comment> findByIdOrType(@Param(value = "parentId") Long id, @Param(value = "type") Integer type);
@@ -37,5 +37,7 @@ public interface CommentMapper {
     @Delete("DELETE FROM comment WHERE comment_id = #{commentId}")
     Integer deleteByCommentId(@Param(value = "commentId") Long id);
 
+    @Update("UPDATE comment SET like_count = #{likeCount} WHERE comment_id = #{commentId}")
+    Integer CommentLikeCount(Comment comment);
 
 }

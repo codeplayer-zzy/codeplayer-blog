@@ -3,9 +3,12 @@ package com.codeplayer.controller;
 import com.codeplayer.dto.ArticleDTO;
 import com.codeplayer.dto.CommentDTO;
 import com.codeplayer.dto.ResultDTO;
+import com.codeplayer.elasticsearch.ArticleRepository;
 import com.codeplayer.enums.CommentTypeEnum;
 import com.codeplayer.service.ArticleService;
 import com.codeplayer.service.CommentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,11 +22,16 @@ public class PageArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+//    @Autowired
+//    private RabbitTemplate rabbitTemplate;
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private ArticleRepository articleRepository;
+
+    private static final Logger log = LoggerFactory.getLogger(PageArticleController.class);
 
     /**
      * 跳转到文章页面
@@ -57,7 +65,10 @@ public class PageArticleController {
         if (aa == 0) {
             return ResultDTO.errorOf(100, "服务冒烟了，要不然你稍后再试试！！");
         }else {
-            rabbitTemplate.convertAndSend("es","article.delete", id);
+            //rabbitTemplate.convertAndSend("es","article.delete", id);
+            //删除ES索引数据
+            articleRepository.deleteById(id);
+            log.warn("【Elasticsearch】消费成功,删除ES索引数据");
             return ResultDTO.okOf(200,"恭喜您，轻删除成功了！！");
         }
     }
@@ -77,6 +88,8 @@ public class PageArticleController {
             return ResultDTO.okOf(200,"恭喜您，永久删除成功了！！");
         }
     }
+
+
 
 
 }

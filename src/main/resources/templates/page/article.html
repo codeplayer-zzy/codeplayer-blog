@@ -65,7 +65,9 @@
                         });
                     </script>
                 </div>
+
             </div>
+
 
             <!--回答输入框-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin: 20px 0; background: #fff;">
@@ -114,7 +116,11 @@
                             </h5>
                             <div th:text="${commentDTO.content}" style="margin-top: 10px;"></div>
                             <div class="menu" style="margin-top: 10px; color: #999">
-                                <span class="glyphicon glyphicon-thumbs-up icon"></span>
+                                <span th:data-id="${commentDTO.commentId}" onclick="likeComments(this)">
+                                    <span class="glyphicon glyphicon-thumbs-up icon"></span>
+                                    <span th:id="${'likeCount-'+commentDTO.commentId}" th:text="${commentDTO.likeCount}"></span>
+                                </span>&ensp;
+
                                 <span th:data-id="${commentDTO.commentId}" onclick="collapseComments(this)">
                                     <span class="glyphicon glyphicon-comment icon"></span>
                                     <span th:text="${commentDTO.commentCount}"></span>

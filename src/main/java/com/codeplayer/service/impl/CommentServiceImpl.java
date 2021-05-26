@@ -21,6 +21,11 @@ import java.util.stream.Collectors;
 
 @Service("commentService")
 public class CommentServiceImpl extends BaseService implements CommentService {
+    /**
+     *  插入评论
+     * @param comment
+     * @param user
+     */
     @Override
     @Transactional
     public void insert(Comment comment, User user) {
@@ -31,7 +36,7 @@ public class CommentServiceImpl extends BaseService implements CommentService {
             throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
         }
         if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
-            //回复评论
+            //回复的评论
             Comment dbcomment = commentMapper.findByCommentId(comment.getParentId());
             if (dbcomment == null){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
@@ -46,11 +51,11 @@ public class CommentServiceImpl extends BaseService implements CommentService {
             Comment comment1 = new Comment();
             comment1.setCommentId(comment.getParentId());
             comment1.setCommentCount(dbcomment.getCommentCount() + 1L);
-            commentMapper.incCommentCount(comment1);
+            commentMapper.incCommentCommentCount(comment1);
             //创建通知
             createNotify(comment, dbcomment.getCommentator(), user.getName(), article.getTitle(), NotificationTypeEnum.REPLY_COMMENT,article.getArticleId());
         }else {
-            //回复问题
+            //回复的文章
             Article article = articleMapper.findById(comment.getParentId());
             if (article == null){
                 throw new CustomizeException(
@@ -64,6 +69,15 @@ public class CommentServiceImpl extends BaseService implements CommentService {
         }
     }
 
+    /**
+     *  创建通知
+     * @param comment
+     * @param receiver
+     * @param notifierName
+     * @param outerTitle
+     * @param notificationType
+     * @param articleId
+     */
     private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, Long articleId) {
         if (receiver == comment.getCommentator()) {
             return;
@@ -80,6 +94,12 @@ public class CommentServiceImpl extends BaseService implements CommentService {
         notificationMapper.insert(notification);
     }
 
+    /**
+     *  查找评论
+     * @param id
+     * @param commentTypeEnum
+     * @return
+     */
     @Override
     public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum commentTypeEnum) {
         Integer type = commentTypeEnum.getType();
@@ -107,6 +127,11 @@ public class CommentServiceImpl extends BaseService implements CommentService {
         return commentDTOList;
     }
 
+    /**
+     *  删除文章的评论
+     * @param id
+     * @return
+     */
     @Override
     public Integer delCommentsByCommentId(Long id) {
         Comment comment = commentMapper.findByCommentId(id);
@@ -115,4 +140,31 @@ public class CommentServiceImpl extends BaseService implements CommentService {
         Integer aa = commentMapper.deleteByCommentId(id);//删除一级评论
         return aa;//成功与否
     }
+
+    /**
+     *  增加点赞数
+     * @param id
+     * @return
+     */
+    @Override
+    public Integer likeCommentsByCommentId(Long id) {
+        Comment comment = commentMapper.findByCommentId(id);
+        comment.setLikeCount(comment.getLikeCount() + 1L);
+        Integer aa = commentMapper.CommentLikeCount(comment);
+        return aa;
+    }
+
+    /**
+     *  取消点赞评论
+     * @param id
+     * @return
+     */
+    @Override
+    public Integer cancelLikeCommentByCommentId(Long id) {
+        Comment comment = commentMapper.findByCommentId(id);
+        comment.setLikeCount(comment.getLikeCount() - 1L);
+        Integer aa = commentMapper.CommentLikeCount(comment);
+        return aa;
+    }
+
 }

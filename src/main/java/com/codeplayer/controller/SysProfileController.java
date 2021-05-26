@@ -45,7 +45,7 @@ public class SysProfileController {
             PageDTO<NotificationDTO> profileRepliesPageDTO = notificationService.profileRepliesPageList(user.getUserId(), page, size);
             model.addAttribute("profilePageDTO", profileRepliesPageDTO);
             model.addAttribute("section", "replies");
-            model.addAttribute("sectionName", "我的回复");
+            model.addAttribute("sectionName", "我的通知");
             return "front/profile";
         }else if ("draft".equals(active)) {
             PageDTO<ArticleDTO> profileDraftPageDTO = articleService.profileMultiPageList(user.getUserId(), page, size, ArticleStatusEnum.DRAFT.getStatus());

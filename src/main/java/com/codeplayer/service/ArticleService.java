@@ -36,4 +36,7 @@ public interface ArticleService {
 
     Integer saveArticle(Article article);
 
+    Integer articleAllPublish(Long userId, Integer status);
+
+    List<Article> findByUserIdAndPublishStatus(Long userId, Integer status);
 }
