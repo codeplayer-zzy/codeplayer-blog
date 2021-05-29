@@ -8,7 +8,6 @@
     <link rel="stylesheet" th:href="@{/common/css/bootstrap.css}">
     <link rel="stylesheet" href="/front/style.css" th:href="@{/front/style.css}">
     <script src="/common/js/jquery-3.6.0.min.js" th:src="@{/common/js/jquery-3.6.0.min.js}"></script>
-    <script src="/common/js/bootstrap.js" th:src="@{/common/js/bootstrap.js}"></script>
     <script src="/front/codeplayer.js" th:src="@{/front/codeplayer.js}"></script>
 
 </head>
@@ -77,7 +76,7 @@
         <!--内容左部-->
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-9">
             <h4 style="display: inline;"><span th:text="${sectionName}"></span></h4>
-            <button type="button" class="btn btn-info" onclick="allPublish(this)" style="margin-left: 15px;">一键发布</button>
+            <button th:if="${profilePageDTO.getData() == null}" type="button" class="btn btn-info" onclick="allPublish(this)" style="margin-left: 15px;">一键发布</button>
             <hr>
             <!--我的草稿-->
             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="padding: 0px;">
@@ -140,6 +139,8 @@
         </div>
     </div>
 </div>
+<!--页尾-->
+<div th:insert="~{foot :: foot}"></div>
 </body>
 <!-- 全局js -->
 <script th:src="@{/common/js/jquery-3.6.0.min.js}"></script>

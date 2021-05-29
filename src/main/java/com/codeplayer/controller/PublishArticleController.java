@@ -32,6 +32,7 @@ public class PublishArticleController {
     private ArticleService articleService;
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
 //    @Autowired
 //    private ArticleRepository articleRepository;
 
@@ -119,6 +120,7 @@ public class PublishArticleController {
             Optional<Article> article1 = articleList.stream().findFirst();
             Long articleId1 = article1.get().getArticleId();
             rabbitTemplate.convertAndSend("es", "article.save", articleId1);
+
 //            Article article2 = articleService.findById(articleId1);
 //            article2.setStatus(null);
 //            article2.setCreator(null);
@@ -130,6 +132,7 @@ public class PublishArticleController {
         //消费生产者
         //发布更新的文章
         rabbitTemplate.convertAndSend("es", "article.save", articleId);
+
 //        Article article2 = articleService.findById(articleId);
 //        article2.setStatus(null);
 //        article2.setCreator(null);

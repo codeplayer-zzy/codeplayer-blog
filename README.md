@@ -7,6 +7,7 @@
 2021/5/21 ：增加了查看文章的最新、最热、待回复功能。  
 2021/5/25 ：增加了文章草稿箱功能，删除文章功能，还完善了搜素功能以及profile页面。
 2021/5/26 ：增加了评论点赞功能，增加了草稿箱一键发布功能。
+2021/5/29 ：增加了底部。
 
 ## 演示图片
 [![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489946035_cf4f81eddf3b453b997a10811d60409f.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489946035_cf4f81eddf3b453b997a10811d60409f.png)

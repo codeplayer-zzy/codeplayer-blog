@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" th:href="@{/common/css/bootstrap.css}">
     <link rel="stylesheet" href="/front/style.css" th:href="@{/front/style.css}">
+
 </head>
 <body>
 <!--导航栏-->
@@ -118,6 +119,8 @@
         </div>
     </div>
 </div>
+<!--页尾-->
+<div th:insert="~{foot :: foot}"></div>
 </body>
 <!-- 全局js -->
 <script th:src="@{/common/js/jquery-3.6.0.min.js}"></script>
