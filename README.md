@@ -5,18 +5,18 @@
 
 ## 增加功能
 2021/5/21 ：增加了查看文章的最新、最热、待回复功能。  
-2021/5/25 ：增加了文章草稿箱功能，删除文章功能，还完善了搜素功能以及profile页面。
-2021/5/26 ：增加了评论点赞功能，增加了草稿箱一键发布功能。
-2021/5/29 ：增加了底部。
+2021/5/25 ：增加了文章草稿箱功能，删除文章功能，还完善了搜素功能以及profile页面。  
+2021/5/26 ：增加了评论点赞功能，增加了草稿箱一键发布功能。  
+2021/5/29 ：增加了底部。  
 
 ## 演示图片
-[![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489946035_cf4f81eddf3b453b997a10811d60409f.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489946035_cf4f81eddf3b453b997a10811d60409f.png)
-[![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489973354_415ff14bcf6a49c6b0ebd78227b90fad.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489973354_415ff14bcf6a49c6b0ebd78227b90fad.png)
-[![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490024016_935fea0eed57449fb90f7a0d007c719f.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490024016_935fea0eed57449fb90f7a0d007c719f.png)
-[![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-21/1621609840846_f5340d7fcde54e1499afdea5addedfcd.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-21/1621609840846_f5340d7fcde54e1499afdea5addedfcd.png)
-[![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490099345_b2f8c329ef1449449fc5b66c44f17e8e.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490099345_b2f8c329ef1449449fc5b66c44f17e8e.png)
-[![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-25/1621922007210_759d6e6e309c43558e36955932259813.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-25/1621922007210_759d6e6e309c43558e36955932259813.png)
-[![](https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-25/1621922076336_ba65d09909e84c3b836a200a8246460a.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-25/1621922076336_ba65d09909e84c3b836a200a8246460a.png)
+[![](https://gitee.com/codeplayer-zzy/codeplayer-blog-table/raw/master//img/2021-05-20/1621489946035_cf4f81eddf3b453b997a10811d60409f.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489946035_cf4f81eddf3b453b997a10811d60409f.png)
+[![](https://gitee.com/codeplayer-zzy/codeplayer-blog-table/raw/master//img/2021-05-20/1621489973354_415ff14bcf6a49c6b0ebd78227b90fad.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621489973354_415ff14bcf6a49c6b0ebd78227b90fad.png)
+[![](https://gitee.com/codeplayer-zzy/codeplayer-blog-table/raw/master//img/2021-05-20/1621490024016_935fea0eed57449fb90f7a0d007c719f.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490024016_935fea0eed57449fb90f7a0d007c719f.png)
+[![](https://gitee.com/codeplayer-zzy/codeplayer-blog-table/raw/master//img/2021-05-21/1621609840846_f5340d7fcde54e1499afdea5addedfcd.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-21/1621609840846_f5340d7fcde54e1499afdea5addedfcd.png)
+[![](https://gitee.com/codeplayer-zzy/codeplayer-blog-table/raw/master//img/2021-05-20/1621490099345_b2f8c329ef1449449fc5b66c44f17e8e.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-20/1621490099345_b2f8c329ef1449449fc5b66c44f17e8e.png)
+[![](https://gitee.com/codeplayer-zzy/codeplayer-blog-table/raw/master//img/2021-05-25/1621922007210_759d6e6e309c43558e36955932259813.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-25/1621922007210_759d6e6e309c43558e36955932259813.png)
+[![](https://gitee.com/codeplayer-zzy/codeplayer-blog-table/raw/master//img/2021-05-25/1621922076336_ba65d09909e84c3b836a200a8246460a.png)](http://https://gitee.com/zhangzuyi/codeplayer-blog-table/raw/master//img/2021-05-25/1621922076336_ba65d09909e84c3b836a200a8246460a.png)
 
 ## 使用技术
 | 后端技术 | 链接 |
